@@ -1,0 +1,56 @@
+
+@font-face {
+    font-family: "pixel1";
+    src: url("../src/assets/fonts/pixel1.ttf");
+}
+
+@font-face {
+    font-family: "pixel2";
+    src: url("../src/assets/fonts/pixel2.ttf");
+}
+
+@font-face {
+    font-family: "pixel3";
+    src: url("../src/assets/fonts/pixel3.ttf");
+}
+
+html, body {
+    background-color: white;
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+}
+
+canvas {
+    display: block;
+}
+
+.close-window-btn {
+    display: inline;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 25px;
+    height: 25px;
+    background-color: #C83939;
+    font-family: sans-serif;
+    font-size: 10pt;
+    color: white;
+    border: none;
+    border-radius: 0px 0px 5px 0px;
+    border-right: 2px solid darkred;
+    border-bottom: 2px solid darkred;
+}
+
+.close-window-btn:focus {
+    outline: none;
+}
+
+.close-window-btn:hover {
+    cursor: pointer;
+    background-color: #DF4040;
+}
+
+.secret-content {
+    display: none;
+}
