@@ -1,0 +1,50 @@
+{
+  "anims": [
+    {
+      "key": "on",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-obst-stone-torch",
+          "frame": 0,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-obst-stone-torch",
+          "frame": 1,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-obst-stone-torch",
+          "frame": 2,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-obst-stone-torch",
+          "frame": 3,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-obst-stone-torch",
+          "frame": 4,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    }
+  ],
+  "globalTimeScale": 1
+}
