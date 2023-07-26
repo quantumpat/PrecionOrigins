@@ -1,1 +1,1 @@
-{"hello":"world"}
+{"currentScene":"TakarTutorial","scenes":[{"sceneName":"TakarTutorial","player":{"x":836,"y":461,"direction":"down","isLampOn":true},"characters":{"kiro":{"x":1060,"y":440,"direction":"left"}},"dialogue":{"current":1}}]}

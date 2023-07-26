@@ -34,7 +34,7 @@ class Kiro extends Phaser.Physics.Arcade.Sprite {
         this.setPipeline("Light2D");
 
         this.dialogues = [];
-        this.currentDialogue = null;
+        this.currentDialogueIndex = 0;
 
     }
 
@@ -54,7 +54,7 @@ class Kiro extends Phaser.Physics.Arcade.Sprite {
         dia.onComplete = callback;
 
         if (this.dialogues.length == 0) {
-            this.currentDialogue = dia;
+            this.currentDialogueIndex = 0;
         }
 
         this.dialogues.push(dia);
@@ -130,7 +130,11 @@ class Kiro extends Phaser.Physics.Arcade.Sprite {
     }
 
     getCurrentDialogue() {
-        return this.currentDialogue;
+        return this.dialogues[this.currentDialogueIndex];
+    }
+
+    setCurrentDialogueIndex(index) {
+        this.currentDialogueIndex = index;
     }
 
 }

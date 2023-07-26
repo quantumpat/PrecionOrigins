@@ -7,7 +7,7 @@ function saveGame(data, onComplete) {
     }
 }
 
-function loadGame(scene, onComplete) {
+function loadGame(onComplete) {
     document.getElementById("_get-load-data").innerText = "[Get]";
 
     let interval = window.setInterval(function() {
