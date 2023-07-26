@@ -266,6 +266,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         return this.direction;
     }
 
+    setDirection(direction) {
+        this.direction = direction;
+    }
+
     getWalkSpeed() {
         return this.walkSpeed;
     }

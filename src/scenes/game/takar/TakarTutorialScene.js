@@ -2,6 +2,28 @@
 let controlTutorialComplete = true;
 let fadeIn = false;
 
+let loadData = null;
+let sceneData = {
+    sceneName: "TakarTutorial",
+    player: {
+        x: 385,
+        y: 150,
+        direction: "down",
+        isLampOn: false
+    },
+    characters: {
+        kiro: {
+            x: 1060,
+            y: 440,
+            direction: "left",
+            currentDialogueIndex: 0
+        }
+    },
+    dialogue: {
+        current: 0
+    }
+};
+
 let roomData = {
     time: 11
 };
@@ -19,6 +41,18 @@ class TakarTutorialScene extends Phaser.Scene {
         if (data != null) {
             if (data.fadeIn != null) {
                 fadeIn = data.fadeIn;
+            }
+
+            if (data.loadData != null) {
+
+                for (let i = 0; i < data.loadData.scenes.length; i++) {
+                    if (data.loadData.scenes[i].sceneName === sceneData.sceneName) {
+
+                        sceneData = data.loadData.scenes[i];
+                        loadData = data.loadData;
+                    }
+                }
+
             }
         }
 
@@ -47,6 +81,7 @@ class TakarTutorialScene extends Phaser.Scene {
         this.load.spritesheet("img-obst-tree1", "images/obst/tree1.png", { frameWidth: 64, frameHeight: 96 });
         this.load.spritesheet("img-ui-dialogue-bg", "images/ui/screens/dialogue-bg.png", { frameWidth: 900, frameHeight: 200 });
         this.load.spritesheet("img-ui-dialogue-option-btn", "images/ui/buttons/dialogue-option-btn.png", { frameWidth: 900, frameHeight: 30 });
+        this.load.spritesheet("img-ui-save-btn", "images/ui/buttons/save-btn.png", { frameWidth: 32, frameHeight: 32 });
 
         //Audio
         this.load.audio("audio-tribal-loop", "sound/music/tribal-loop-azteca-154482.mp3");
@@ -129,12 +164,17 @@ class TakarTutorialScene extends Phaser.Scene {
          * Characters
          */
         //Player
-        this.player = new Player(this, 385, 150);
+        this.player = new Player(this, sceneData.player.x, sceneData.player.y);
+        this.player.setDirection(sceneData.player.direction);
+        this.player.setLampOn(sceneData.player.isLampOn);
         this.conversations.setPlayer(this.player);
         this.gameControls.setControlledSprite(this.player);
 
+        console.log(sceneData.player);
+
         //NPC
-        this.kiro = new Kiro(this, 1060, 440);
+        this.kiro = new Kiro(this, sceneData.characters.kiro.x, sceneData.characters.kiro.y);
+        this.kiro.setCurrentDialogueIndex(sceneData.characters.kiro.currentDialogueIndex);
         this.conversations.registerNpc(this.kiro);
 
 
@@ -196,6 +236,81 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
         /*
+         * Save Game
+         */
+        this.saveGameBtn = this.add.image(1270, 10, "img-ui-save-btn", 0);
+        this.saveGameBtn.setOrigin(1, 0);
+        this.saveGameBtn.setInteractive({ cursor: "pointer" });
+        this.saveGameBtn.setScrollFactor(0);
+        this.saveGameBtn.setAlpha(0.8);
+
+        this.saveGameBtn.on("pointerover", function() {
+            this.saveGameBtn.setAlpha(1);
+        }, this);
+
+        this.saveGameBtn.on("pointerout", function() {
+            this.saveGameBtn.setAlpha(0.8);
+        }, this);
+
+        this.saveGameBtn.on("pointerdown", function() {
+
+            this.saveGameBtn.setFrame(1);
+
+            sceneData.player.x = this.player.x;
+            sceneData.player.y = this.player.y;
+            sceneData.player.direction = this.player.direction;
+            sceneData.player.isLampOn = this.player.getLampOn();
+
+            scene.gameControls.setControlsEnabled(false);
+
+            if (loadData == null) {
+                loadData = {
+                    currentScene: "TakarTutorial",
+                    scenes: [sceneData]
+                };
+
+                saveGame(loadData);
+            }else {
+                for (let i = 0; i < loadData.scenes.length; i++) {
+                    if (loadData.scenes[i].sceneName === sceneData.sceneName) {
+                        loadData.scenes[i] = sceneData;
+
+                        saveGame(loadData);
+                    }
+                }
+            }
+
+        }, this);
+
+        this.saveGameBtn.on("pointerup", function() {
+            this.saveGameBtn.setVisible(false);
+
+            this.saveGameBtn.setFrame(0);
+
+            const dialogue = new Dialogue(scene, [
+                new DialoguePart({
+                    text: "Game Saved!",
+                    type: 2
+                })
+            ]);
+
+            const btn = this.saveGameBtn;
+            dialogue.onComplete = function() {
+                scene.gameControls.setControlsEnabled(true);
+
+                btn.setVisible(true);
+            };
+
+            dialogue.start();
+
+        }, this);
+
+        this.saveGameBtn.setVisible(false);
+
+
+
+
+        /*
          * Dialogue
          */
         this.dialogue1 = new Dialogue(this, [
@@ -227,12 +342,18 @@ class TakarTutorialScene extends Phaser.Scene {
         this.dialogue1.onComplete = function() {
             scene.gameControls.setControlsEnabled(true);
 
+            sceneData.dialogue.current = 1;
+
+            scene.saveGameBtn.setVisible(true);
+
             scene.time.addEvent({
                 delay: 10000,
                 callback: function() {
                     if (scene.player.distanceMoved > 0) {
                         return;
                     }
+
+                    scene.saveGameBtn.setVisible(false);
 
                     scene.gameControls.setControlsEnabled(false);
 
@@ -245,12 +366,14 @@ class TakarTutorialScene extends Phaser.Scene {
 
                     dialogue.onComplete = function() {
                         scene.gameControls.setControlsEnabled(true);
+
+                        scene.saveGameBtn.setVisible(true);
                     };
 
                     dialogue.start();
 
                 }
-            })
+            });
         };
 
         this.dialogue2 = new Dialogue(this, [
@@ -265,6 +388,8 @@ class TakarTutorialScene extends Phaser.Scene {
         ]);
         this.dialogue2.onComplete = function() {
             scene.gameControls.setControlsEnabled(true);
+
+            scene.saveGameBtn.setVisible(true);
         };
 
 
@@ -291,7 +416,13 @@ class TakarTutorialScene extends Phaser.Scene {
         this.time.addEvent({
             delay: 1000,
             callback: function() {
-                this.dialogue1.start();
+
+                if (sceneData.dialogue.current == 0) {
+                    this.dialogue1.start();
+                }else {
+                    scene.gameControls.setControlsEnabled(true);
+                }
+
             },
             callbackScope: this,
             loop: false
@@ -329,6 +460,7 @@ class TakarTutorialScene extends Phaser.Scene {
             if (this.player.distanceMoved >= 350) {
                 if (!this.gameControls.getHasSprintEverBeenPressed()) {
                     this.gameControls.setControlsEnabled(false);
+                    scene.saveGameBtn.setVisible(false);
                     this.dialogue2.start();
                 }
             }

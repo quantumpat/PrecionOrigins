@@ -5,7 +5,7 @@ let hoverText = null;
 let userHasClicked = false;
 
 let loadInfoLabel = null;
-let hasLoadData = false;
+let loadData = null;
 
 class StartMenuScene extends Phaser.Scene {
 
@@ -72,6 +72,10 @@ class StartMenuScene extends Phaser.Scene {
     create() {
 
         //this.scene.start("TakarTutorial");
+
+        loadGame(function(data) {
+            loadData = data;
+        });
 
         this.input.setDefaultCursor("pointer");
 
@@ -421,7 +425,7 @@ function setLoadBtnInteractive(scene, loadBtn) {
         sceneFade.setOrigin(0.5, 0.5);
         sceneFade.setScrollFactor(0);
 
-        if (!hasLoadData) {
+        if (loadData == null) {
             if (loadInfoLabel != null) {
 
                 loadInfoLabel.setVisible(true);
@@ -432,9 +436,23 @@ function setLoadBtnInteractive(scene, loadBtn) {
                     yoyo: true,
                     ease: "bounce.inout",
                     duration: 500
-                })
+                });
 
             }
+        }else {
+
+            for (let i = 0; i < loadData.scenes.length; i++) {
+
+                if (loadData.scenes[i].sceneName === loadData.currentScene) {
+
+                    scene.scene.start(loadData.currentScene, { loadData: loadData });
+
+                    return;
+
+                }
+
+            }
+
         }
 
     });
