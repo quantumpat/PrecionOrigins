@@ -56,6 +56,7 @@ class StartMenuScene extends Phaser.Scene {
         this.load.audio("audio-intro-main", "sound/music/dawn-ilya-kuznetsov.mp3");
 
         //Scripts
+        this.load.script("script-movement", "scripts/char/Movement.js");
         this.load.script("script-dialogue", "scripts/story/Dialogue.js");
         this.load.script("script-dialogue-part", "scripts/story/DialoguePart.js");
         this.load.script("script-conversation-manager", "scripts/story/ConversationManager.js");

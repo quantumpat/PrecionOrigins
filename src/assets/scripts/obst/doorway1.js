@@ -16,6 +16,8 @@ class Doorway1 extends Phaser.Physics.Arcade.Sprite {
 
         this.activated = false;
 
+        this.canUse = false;
+
         //Scale body with offset
 
         this.depth = Math.round(this.y);
@@ -32,7 +34,7 @@ class Doorway1 extends Phaser.Physics.Arcade.Sprite {
 
     callback(player) {
 
-        if (this.activated) {
+        if (this.activated && !this.canUse) {
             return;
         }
 
@@ -61,11 +63,23 @@ class Doorway1 extends Phaser.Physics.Arcade.Sprite {
     }
 
     checkOverlap(player) {
-        this.setDepth(player.depth - 100);
+        this.setDepth(player.depth - 500);
 
-        if (player.body.left > this.body.left && player.body.top > this.body.top && player.body.right < this.body.right + 50 && player.body.bottom < this.body.bottom) {
+        if (player.body.left > (this.body.left - 50) && player.body.top > this.body.top && player.body.right < (this.body.right + 50) && player.body.bottom < this.body.bottom) {
             this.callback(player);
         }
+    }
+
+
+    /*
+     * Getters & Setters
+     */
+    getCanUse() {
+        return this.canUse;
+    }
+
+    setCanUse(canUse) {
+        this.canUse = canUse;
     }
 
     hasActivated() {

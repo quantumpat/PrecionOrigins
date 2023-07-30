@@ -1,1 +1,1 @@
-{"currentScene":"TakarTutorial","scenes":[{"sceneName":"TakarTutorial","player":{"x":836,"y":461,"direction":"down","isLampOn":true},"characters":{"kiro":{"x":1060,"y":440,"direction":"left"}},"dialogue":{"current":1}}]}
+{"currentScene":"TakarTutorial","scenes":[{"sceneName":"TakarTutorial","finishedTutorial":false,"player":{"x":1520,"y":452,"direction":"right","isLampOn":true,"distanceMoved":1443,"hasSprinted":true},"characters":{"kiro":{"x":1558,"y":440,"direction":"down","currentDialogueIndex":0,"currentMovementName":"kiro-0"}},"dialogue":{"current":1}}]}

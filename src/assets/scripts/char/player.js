@@ -286,6 +286,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         return this.distanceMoved;
     }
 
+    setDistanceMoved(distance) {
+        this.distanceMoved = distance;
+    }
+
     getSprinting() {
         return this.isSprinting;
     }
