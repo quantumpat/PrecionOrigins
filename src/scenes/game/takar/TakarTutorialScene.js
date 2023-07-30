@@ -6,6 +6,7 @@ let loadData = null;
 let sceneData = {
     sceneName: "TakarTutorial",
     finishedTutorial: false,
+    currentTime: 11,
     player: {
         x: 385,
         y: 150,
@@ -26,10 +27,6 @@ let sceneData = {
     dialogue: {
         current: 0
     }
-};
-
-let roomData = {
-    time: 11
 };
 
 class TakarTutorialScene extends Phaser.Scene {
@@ -112,15 +109,22 @@ class TakarTutorialScene extends Phaser.Scene {
 
     create() {
 
-        const scene = this;
-
         /*
          * REQUIRED
          */
+        const scene = this;
         this.isSaving = false;
-
         this.worldScale = 3;
 
+
+
+
+
+
+
+        /*
+         * NOT REQUIRED
+         */
         this.input.setDefaultCursor("default");
 
         //Controls
@@ -148,6 +152,11 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
+
+
+
+
+
         /*
          * Tilemap
          */
@@ -168,6 +177,11 @@ class TakarTutorialScene extends Phaser.Scene {
 
         this.cameras.main.setBounds(0, 0, this.worldMap.widthInPixels * this.worldScale, this.worldMap.heightInPixels * this.worldScale);
         this.physics.world.setBounds(0, 0, this.worldMap.widthInPixels * this.worldScale, this.worldMap.heightInPixels * this.worldScale);
+
+
+
+
+
 
 
 
@@ -192,6 +206,10 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
+
+
+
+
         /*
          * Obstacles
          */
@@ -206,6 +224,10 @@ class TakarTutorialScene extends Phaser.Scene {
         ];
 
         this.doorway1 = new Doorway1(this, 2860, 572, "TakarTutorial", {  });
+
+
+
+
 
 
 
@@ -227,11 +249,17 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
+
+
+
         /*
          * Day / Night
          */
-        //Day/Night
         //updateDayNight(this);
+
+
+
+
 
 
 
@@ -246,11 +274,16 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
+
+
+
+
         /*
          * Save Game
          */
         this.saveGameBtn = this.add.image(1270, 10, "img-ui-save-btn", 0);
         this.saveGameBtn.setOrigin(1, 0);
+        this.saveGameBtn.setVisible(false);
         this.saveGameBtn.setInteractive({ cursor: "pointer" });
         this.saveGameBtn.setScrollFactor(0);
         this.saveGameBtn.setAlpha(0.8);
@@ -293,9 +326,10 @@ class TakarTutorialScene extends Phaser.Scene {
 
         }, this);
 
-        if (sceneData.dialogue.current == 0) {
-            this.saveGameBtn.setVisible(false);
-        }
+
+
+
+
 
 
 
@@ -331,7 +365,6 @@ class TakarTutorialScene extends Phaser.Scene {
         ]);
         this.dialogue1.onComplete = function() {
             sceneData.dialogue.current = 1;
-            scene.player.setTalking(false);
 
             scene.time.addEvent({
                 delay: 10000,
@@ -348,10 +381,6 @@ class TakarTutorialScene extends Phaser.Scene {
                             type: 2
                         })
                     ]);
-
-                    dialogue.onComplete = function() {
-                        scene.player.setTalking(false);
-                    };
 
                     dialogue.start();
 
@@ -390,7 +419,6 @@ class TakarTutorialScene extends Phaser.Scene {
                 type: 2
             })
         ]), function() {
-            scene.player.setTalking(false);
             scene.kiro.setCanTalk(false);
             scene.kiro.startMovement("kiro-0");
         });
@@ -403,15 +431,16 @@ class TakarTutorialScene extends Phaser.Scene {
 
                 if (sceneData.dialogue.current == 0) {
                     this.dialogue1.start();
-                    this.player.setTalking(true);
-                }else {
-                    this.player.setTalking(false);
                 }
 
             },
             callbackScope: this,
             loop: false
         });
+
+
+
+
 
 
 
@@ -450,7 +479,6 @@ class TakarTutorialScene extends Phaser.Scene {
         sceneData.characters.kiro.y = this.kiro.y;
         sceneData.characters.kiro.direction = this.kiro.getDirection();
         sceneData.characters.kiro.currentDialogueIndex = this.kiro.getCurrentDialogueIndex();
-
         if (this.kiro.getCurrentMovement() == null) {
             sceneData.characters.kiro.currentMovementName = null;
         }else {

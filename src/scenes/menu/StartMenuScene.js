@@ -57,6 +57,7 @@ class StartMenuScene extends Phaser.Scene {
 
         //Scripts
         this.load.script("script-movement", "scripts/char/Movement.js");
+        this.load.script("script-npc", "scripts/char/NPC.js");
         this.load.script("script-dialogue", "scripts/story/Dialogue.js");
         this.load.script("script-dialogue-part", "scripts/story/DialoguePart.js");
         this.load.script("script-conversation-manager", "scripts/story/ConversationManager.js");

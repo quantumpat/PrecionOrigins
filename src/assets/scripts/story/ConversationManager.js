@@ -62,8 +62,9 @@ class ConversationManager {
 
         if (!this.activeNpc.getCanTalk()) {return;}
 
-        this.scene.gameControls.setControlsEnabled(false);
-        this.scene.player.setTalking(true);
+        if (this.scene.player != null) {
+            this.scene.player.setTalking(true);
+        }
 
         if (this.activeNpc.getCurrentDialogue() != null) {
             this.activeNpc.getCurrentDialogue().start();
@@ -81,7 +82,9 @@ class ConversationManager {
             this.activeNpc = null;
         }
 
-        this.scene.player.setTalking(false);
+        if (this.scene.player != null) {
+            this.scene.player.setTalking(false);
+        }
 
     }
 

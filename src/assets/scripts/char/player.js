@@ -24,7 +24,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.walkSpeed = 60;
         this.sprintSpeed = 180;
         this.currentSpeed = this.walkSpeed;
+
         this.distanceMoved = 0;
+
         this.isSprinting = false;
         this.isStanding = true;
 

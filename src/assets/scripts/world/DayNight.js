@@ -1,0 +1,11 @@
+
+class DayNight {
+
+    /*
+     * Constructor
+     */
+    constructor() {
+
+    }
+
+}

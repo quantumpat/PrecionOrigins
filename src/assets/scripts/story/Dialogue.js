@@ -227,6 +227,10 @@ class Dialogue {
             return;
         }
 
+        if (this.scene.player != null) {
+            this.scene.player.setTalking(true);
+        }
+
         this.isActive = true;
 
         if (this.dialogueParts[0] != null) {
@@ -245,6 +249,9 @@ class Dialogue {
 
         this.isActive = false;
 
+        if (this.scene.player != null) {
+            this.scene.player.setTalking(false);
+        }
         this.scene.conversations.stop();
 
         this.onComplete();
