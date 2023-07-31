@@ -37,7 +37,7 @@ class ConversationManager {
             const dist = Math.sqrt(Math.pow(this.player.x - npc.x, 2) + Math.pow(this.player.y - npc.y, 2));
 
             if (dist < this.talkRadius) {
-                if (npc.getCanTalk()) {
+                if (npc.getCanTalk() && npc.getCurrentDialogue() != null) {
                     this.scene.gameControls.showHint("talk");
                 }
 

@@ -21,6 +21,7 @@ let sceneData = {
             x: 350,
             y: 145,
             direction: "left",
+            canTalk: true,
             currentDialogueIndex: 0,
             currentMovementName: null,
             handItem: "hand-lamp"
@@ -123,6 +124,7 @@ class TakarTutorialScene extends Phaser.Scene {
         //Do this first so other objects can use it
         this.scene.sendToBack();
         this.uiScene = this.scene.get("UI");
+        this.uiScene.switchTo("TakarTutorial");
 
 
 
@@ -212,6 +214,7 @@ class TakarTutorialScene extends Phaser.Scene {
         this.kiro.setCurrentDialogueIndex(sceneData.characters.kiro.currentDialogueIndex);
         this.kiro.startMovement(sceneData.characters.kiro.currentMovementName);
         this.kiro.setHandItem("hand-lamp");
+        this.kiro.setDirection(sceneData.characters.kiro.direction, true);
         this.conversations.registerNpc(this.kiro);
 
 
@@ -363,6 +366,7 @@ class TakarTutorialScene extends Phaser.Scene {
             })
         ]), function() {
             scene.kiro.setCanTalk(false);
+            scene.kiro.nextDialogue();
             scene.kiro.startMovement("kiro-0");
         });
 
@@ -423,6 +427,7 @@ class TakarTutorialScene extends Phaser.Scene {
         sceneData.characters.kiro.y = this.kiro.y;
         sceneData.characters.kiro.direction = this.kiro.getDirection();
         sceneData.characters.kiro.currentDialogueIndex = this.kiro.getCurrentDialogueIndex();
+        sceneData.characters.kiro.canTalk = this.kiro.getCanTalk();
         if (this.kiro.getCurrentMovement() == null) {
             sceneData.characters.kiro.currentMovementName = null;
         }else {

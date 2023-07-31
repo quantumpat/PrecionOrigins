@@ -73,7 +73,6 @@ class Chapter1Scene extends Phaser.Scene {
                     onComplete: function() {
                         scene.sound.stopAll();
                         scene.scene.start("TakarTutorial", { fadeIn: true });
-                        scene.scene.get("UI").switchTo("TakarTutorial");
                     }
                 });
             },

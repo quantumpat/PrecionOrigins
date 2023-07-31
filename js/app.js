@@ -14,7 +14,7 @@ const gameConfig = {
     height: 720,
     pixelArt: true,
     title: "Precion Origins - A Space Odyssey",
-    version: "0.0.5",
+    version: "0.0.6",
     physics: {
         default: "arcade",
         arcade: {

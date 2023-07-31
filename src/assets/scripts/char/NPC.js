@@ -85,31 +85,31 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         if (this.isWalking.left) {
             this.body.setVelocityX(-this.walkSpeed);
             this.body.setVelocityY(0);
-            this.play(this.walkAnimsKey + "-walk-left", true);
+            this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.right) {
             this.body.setVelocityX(this.walkSpeed);
             this.body.setVelocityY(0);
-            this.play(this.walkAnimsKey + "-walk-right", true);
+            this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.up) {
             this.body.setVelocityY(-this.walkSpeed);
             this.body.setVelocityX(0);
-            this.play(this.walkAnimsKey + "-walk-up", true);
+            this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.down) {
             this.body.setVelocityY(this.walkSpeed);
             this.body.setVelocityX(0);
-            this.play(this.walkAnimsKey + "-walk-down", true);
+            this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.left && this.isWalking.up) {
             this.body.setVelocity(-this.walkSpeed);
-            this.play(this.walkAnimsKey + "-walk-left", true);
+            this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.left && this.isWalking.down) {
             this.body.setVelocity(-this.walkSpeed, this.walkSpeed);
-            this.play(this.walkAnimsKey + "-walk-left", true);
+            this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.right && this.isWalking.up) {
             this.body.setVelocity(this.walkSpeed, -this.walkSpeed);
-            this.play(this.walkAnimsKey + "-walk-right", true);
+            this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.right && this.isWalking.down) {
             this.body.setVelocity(this.walkSpeed);
-            this.play(this.walkAnimsKey + "-walk-right", true);
+            this.play(this.getAnimationKey(), true);
         }else {
             this.body.setVelocity(0, 0);
             this.stop();
@@ -136,18 +136,38 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         let dia = dialogue;
         dia.onComplete = callback;
 
-        if (this.dialogues.length == 1) {
-            this.currentDialogueIndex = 0;
-        }
-
         this.dialogues.push(dia);
 
+    }
+
+    nextDialogue() {
+        this.currentDialogueIndex += 1;
     }
 
 
     /*
      * Getters & Setters
      */
+
+    getAnimationKey() {
+
+        let str = this.walkAnimsKey + "-";
+
+        if (this.isWalking.left || this.isWalking.right || this.isWalking.up || this.isWalking.down) {
+            str += "walk-";
+        }
+
+        str += this.direction;
+
+        if (this.handItem != null) {
+            if (this.handItem.type === "TOOL") {
+                str += "-tool";
+            }
+        }
+
+        return str;
+
+    }
 
     getWalkSpeed() {
         return this.walkSpeed;
@@ -250,14 +270,26 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.direction = dir;
 
         if (updateFrame) {
-            if (dir == "up") {
-                this.setFrame(4);
-            }else if (dir == "down") {
-                this.setFrame(0);
-            }else if (dir == "left") {
-                this.setFrame(8);
-            }else if (dir == "right") {
-                this.setFrame(12);
+            if (this.handItem == null) {
+                if (dir == "up") {
+                    this.setFrame(4);
+                }else if (dir == "down") {
+                    this.setFrame(0);
+                }else if (dir == "left") {
+                    this.setFrame(8);
+                }else if (dir == "right") {
+                    this.setFrame(12);
+                }
+            }else {
+                if (dir == "up") {
+                    this.setFrame(20);
+                }else if (dir == "down") {
+                    this.setFrame(16);
+                }else if (dir == "left") {
+                    this.setFrame(24);
+                }else if (dir == "right") {
+                    this.setFrame(28);
+                }
             }
         }
 
