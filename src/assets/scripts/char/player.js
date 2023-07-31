@@ -10,7 +10,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.setTexture("img-char-player");
         this.setPosition(x, y);
-        this.setScale(scene.worldScale);
 
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true);
@@ -21,8 +20,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.direction = "down";
 
-        this.walkSpeed = 60;
-        this.sprintSpeed = 180;
+        this.walkSpeed = 20;
+        this.sprintSpeed = 60;
         this.currentSpeed = this.walkSpeed;
 
         this.distanceMoved = 0;
@@ -38,7 +37,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.items = [
             new HandLamp(this.scene, this)
         ];
-
         this.handItem = null;
 
         this.currentAnimationKey = "walk-down";
@@ -48,8 +46,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //Lights
         this.setPipeline("Light2D");
-        this.light = scene.lights.addLight(x, y, 250).setIntensity(0.9);
-        this.light.setVisible(this.isLampOn);
 
         //Add to scene
         scene.add.existing(this);
@@ -66,8 +62,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.sound.setListenerPosition(this.x, this.y);
 
         this.setDepth(Math.round(this.y));
-
-        this.light.setPosition(this.x, this.y + 40);
 
         if (this.handItem != null) {
             this.handItem.update();
@@ -314,34 +308,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     setLampOn(val) {
         if (val) {
-            this.scene.sound.play("audio-item-equip", {
-                loop: false,
-                volume: 0.6,
-                source: {
-                    x: 0,
-                    y: 0,
-                    refDistance: 1000000
-                }
-            });
+            this.isLampOn = true;
             this.setHandItem(this.items[0]);
         }else {
-            if (this.handItem != null) {
-                this.scene.sound.play("audio-item-equip", {
-                    loop: false,
-                    volume: 0.6,
-                    source: {
-                        x: 0,
-                        y: 0,
-                        refDistance: 1000000
-                    }
-                });
-            }
-
+            this.isLampOn = false;
             this.setHandItem(null);
         }
-
-        this.isLampOn = val;
-        this.light.setVisible(this.isLampOn);
     }
 
     getItems() {
@@ -351,9 +323,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     setHandItem(item) {
         if (this.handItem != null) {
             this.handItem.off();
+            this.handItem.update();
         }
 
         this.handItem = item;
+
+        this.scene.sound.play("audio-item-equip", {
+            loop: false,
+            volume: 0.6,
+            source: {
+                x: 0,
+                y: 0,
+                refDistance: 1000000
+            }
+        });
 
         if (this.handItem != null) {
             this.handItem.on();
@@ -386,10 +369,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     setOnTalk(callback) {
         this.onTalk = callback;
-    }
-
-    getLight() {
-        return this.light;
     }
 
 }

@@ -9,7 +9,6 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
 
         this.setTexture(texture);
         this.setPosition(x, y);
-        this.setScale(scene.worldScale);
 
         scene.physics.add.existing(this);
         scene.add.existing(this);
@@ -18,7 +17,7 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.body.setOffset(13, 29);
         this.setImmovable(true);
 
-        this.walkSpeed = 60;
+        this.walkSpeed = 20;
         this.isWalking = {
             left: false,
             right: false,
@@ -49,6 +48,11 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.dialogues = [];
         this.currentDialogueIndex = 0;
 
+        this.items = [
+            new HandLamp(this.scene, this)
+        ];
+        this.handItem = null;
+
     }
 
 
@@ -60,7 +64,11 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
 
         this.setDepth(Math.round(this.y));
 
-        if (!this.isTalking && !this.scene.isSaving) {
+        if (this.handItem != null) {
+            this.handItem.update();
+        }
+
+        if (!this.isTalking && !this.scene.uiScene.isSaving) {
             this.updateWalking();
         }else {
             this.body.setVelocity(0, 0);
@@ -237,20 +245,22 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         return this.direction;
     }
 
-    setDirection(dir) {
-        if (dir == "up") {
-            this.direction = dir;
-            this.setFrame(4);
-        }else if (dir == "down") {
-            this.direction = dir;
-            this.setFrame(0);
-        }else if (dir == "left") {
-            this.direction = dir;
-            this.setFrame(8);
-        }else if (dir == "right") {
-            this.direction = dir;
-            this.setFrame(12);
+    setDirection(dir, updateFrame = true) {
+
+        this.direction = dir;
+
+        if (updateFrame) {
+            if (dir == "up") {
+                this.setFrame(4);
+            }else if (dir == "down") {
+                this.setFrame(0);
+            }else if (dir == "left") {
+                this.setFrame(8);
+            }else if (dir == "right") {
+                this.setFrame(12);
+            }
         }
+
     }
 
     getStanding() {
@@ -279,6 +289,36 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
 
     setCurrentDialogueIndex(index) {
         this.currentDialogueIndex = index;
+    }
+
+    getItems() {
+        return this.items;
+    }
+
+    getHandItem() {
+        return this.handItem;
+    }
+
+    setHandItem(name) {
+        if (this.handItem != null) {
+            this.handItem.off();
+            this.handItem.update();
+        }
+
+        if (name === "none") {
+            this.handItem = null;
+            return;
+        }
+
+        for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].getName() === name) {
+                this.handItem = this.items[i];
+            }
+        }
+
+        if (this.handItem != null) {
+            this.handItem.on();
+        }
     }
 
 }

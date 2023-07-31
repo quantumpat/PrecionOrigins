@@ -68,6 +68,7 @@ class Movement {
             //Up/Down movement
             if (this.changeY > 0) {
                 //Move down
+                this.sprite.setDirection("down", false);
                 this.sprite.setWalking({
                     left: false,
                     right: false,
@@ -77,6 +78,7 @@ class Movement {
 
             }else {
                 //Move up
+                this.sprite.setDirection("up", false);
                 this.sprite.setWalking({
                     left: false,
                     right: false,
@@ -88,6 +90,7 @@ class Movement {
             //Left/Right movement
             if (this.changeX > 0) {
                 //Move right
+                this.sprite.setDirection("right", false);
                 this.sprite.setWalking({
                     left: false,
                     right: true,
@@ -96,6 +99,7 @@ class Movement {
                 });
             }else {
                 //Move left
+                this.sprite.setDirection("left", false);
                 this.sprite.setWalking({
                     left: true,
                     right: false,
@@ -106,6 +110,7 @@ class Movement {
         }else {
             if (this.changeX > 0 && this.changeY < 0) {
                 //Right/Up
+                this.sprite.setDirection("right", false);
                 this.sprite.setWalking({
                     left: false,
                     right: true,
@@ -114,6 +119,7 @@ class Movement {
                 });
             }else if (this.changeX > 0 && this.changeY > 0) {
                 //Right/Down
+                this.sprite.setDirection("right", false);
                 this.sprite.setWalking({
                     left: false,
                     right: true,
@@ -122,6 +128,7 @@ class Movement {
                 });
             }else if (this.changeX < 0 && this.changeY < 0) {
                 //Left/Up
+                this.sprite.setDirection("left", false);
                 this.sprite.setWalking({
                     left: true,
                     right: false,
@@ -130,6 +137,7 @@ class Movement {
                 });
             }else {
                 //Left/Down
+                this.sprite.setDirection("left", false);
                 this.sprite.setWalking({
                     left: true,
                     right: false,
@@ -172,7 +180,7 @@ class Movement {
 
         if (this.data != null) {
             if (this.data.faceDownWhenDone) {
-                this.sprite.setDirection("down");
+                this.sprite.setDirection("down", true);
             }
         }
 

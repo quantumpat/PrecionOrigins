@@ -37,14 +37,12 @@ class ConversationManager {
             const dist = Math.sqrt(Math.pow(this.player.x - npc.x, 2) + Math.pow(this.player.y - npc.y, 2));
 
             if (dist < this.talkRadius) {
-                //player.setInTalkRadius(true);
                 if (npc.getCanTalk()) {
                     this.scene.gameControls.showHint("talk");
                 }
 
                 return true;
             }else {
-                //player.setInTalkRadius(false);
                 this.scene.gameControls.hideHint();
 
                 return false;
@@ -67,7 +65,7 @@ class ConversationManager {
         }
 
         if (this.activeNpc.getCurrentDialogue() != null) {
-            this.activeNpc.getCurrentDialogue().start();
+            this.scene.uiScene.dialogueManager.start(this.activeNpc.getCurrentDialogue());
             this.activeNpc.setTalking(true);
         }else {
             this.stop();

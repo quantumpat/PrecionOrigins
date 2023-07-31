@@ -37,7 +37,6 @@ class Item {
 
         this.image = this.scene.add.sprite(this.char.x, this.char.y, this.handImage, 0);
         this.image.setVisible(false);
-        this.image.setScale(scene.worldScale);
 
     }
 
@@ -81,6 +80,78 @@ class Item {
     on() {
         this.image.setVisible(true);
         this.isActive = true;
+    }
+
+
+    /*
+     * Getters & Setters
+     */
+    getScene() {
+        return this.scene;
+    }
+
+    setScene(scene) {
+        this.scene = scene;
+    }
+
+    getChar() {
+        return this.char;
+    }
+
+    setChar(char) {
+        this.char = char;
+    }
+
+    getType() {
+        return this.type;
+    }
+
+    setType(type) {
+        this.type = type;
+    }
+
+    getName() {
+        return this.name;
+    }
+
+    setName(name) {
+        this.name = name;
+    }
+
+    getHandImage() {
+        return this.handImage;
+    }
+
+    setHandImage(image) {
+        this.handImage = image;
+    }
+
+    getIconFrame() {
+        return this.iconFrame;
+    }
+
+    setIconFrame(frame) {
+        this.iconFrame = frame;
+    }
+
+    getFrameUpDown() {
+        return this.frameUpDown;
+    }
+
+    setFrameUpDown(frame) {
+        this.frameUpDown = frame;
+    }
+
+    getFrameLeftRight() {
+        return this.frameLeftRight;
+    }
+
+    setFrameLeftRight(frame) {
+        this.frameLeftRight = frame;
+    }
+
+    getActive() {
+        return this.isActive;
     }
 
     setOffsetsUp(x, y) {

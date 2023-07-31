@@ -280,14 +280,14 @@ class GameControls {
         this.lamp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.talk = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
-        this.controlHintBar = scene.add.image(0, 720, "img-ui-bottom-bar");
+        this.controlHintBar = scene.uiScene.add.image(0, 720, "img-ui-bottom-bar");
         this.controlHintBar.setOrigin(0, 1);
         this.controlHintBar.setScrollFactor(0);
         this.controlHintBar.setDepth(10000000);
         this.controlHintBar.setAlpha(0.5);
         this.controlHintBar.setVisible(false);
 
-        this.controlHintLabel = scene.add.text(640, 706, "", { fontFamily: "pixel1", fontSize: 16, color: "#f0f0f0", align: "right" });
+        this.controlHintLabel = scene.uiScene.add.text(640, 706, "", { fontFamily: "pixel1", fontSize: 16, color: "#f0f0f0", align: "right" });
         this.controlHintLabel.setOrigin(0.5, 1);
         this.controlHintLabel.setScrollFactor(0);
         this.controlHintLabel.setDepth(100000001);

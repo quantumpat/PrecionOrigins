@@ -8,20 +8,22 @@ let sceneData = {
     finishedTutorial: false,
     currentTime: 11,
     player: {
-        x: 385,
-        y: 150,
+        x: 130,
+        y: 50,
         direction: "down",
         isLampOn: false,
         distanceMoved: 0,
-        hasSprinted: false
+        hasSprinted: false,
+        handItem: null
     },
     characters: {
         kiro: {
-            x: 1060,
-            y: 440,
+            x: 350,
+            y: 145,
             direction: "left",
             currentDialogueIndex: 0,
-            currentMovementName: null
+            currentMovementName: null,
+            handItem: "hand-lamp"
         }
     },
     dialogue: {
@@ -81,9 +83,6 @@ class TakarTutorialScene extends Phaser.Scene {
         this.load.spritesheet("img-obst-stone-torch", "images/obst/stone-torch.png", { frameWidth: 8, frameHeight: 24 });
         this.load.spritesheet("img-item-hand-lamp", "images/items/hand-lamp.png", { frameWidth: 8, frameHeight: 9 });
         this.load.spritesheet("img-obst-tree1", "images/obst/tree1.png", { frameWidth: 64, frameHeight: 96 });
-        this.load.spritesheet("img-ui-dialogue-bg", "images/ui/screens/dialogue-bg.png", { frameWidth: 900, frameHeight: 200 });
-        this.load.spritesheet("img-ui-dialogue-option-btn", "images/ui/buttons/dialogue-option-btn.png", { frameWidth: 900, frameHeight: 30 });
-        this.load.spritesheet("img-ui-save-btn", "images/ui/buttons/save-btn.png", { frameWidth: 32, frameHeight: 32 });
 
         //Audio
         this.load.audio("audio-tribal-loop", "sound/music/tribal-loop-azteca-154482.mp3");
@@ -94,11 +93,11 @@ class TakarTutorialScene extends Phaser.Scene {
 
         //Scripts
 
-        this.load.script("script-stone-torch", "scripts/obst/stone-torch.js");
-        this.load.script("script-bush1", "scripts/obst/bush1.js");
-        this.load.script("script-doorway1", "scripts/obst/doorway1.js");
-        this.load.script("script-tree1", "scripts/obst/tree1.js");
-        this.load.script("script-item-hand-lamp", "scripts/inventory/items/hand-lamp.js");
+        this.load.script("script-stone-torch", "scripts/obst/StoneTorch.js");
+        this.load.script("script-bush1", "scripts/obst/Bush1.js");
+        this.load.script("script-doorway1", "scripts/obst/Doorway1.js");
+        this.load.script("script-tree1", "scripts/obst/Tree1.js");
+        this.load.script("script-item-hand-lamp", "scripts/inventory/items/HandLamp.js");
         this.load.script("script-player", "scripts/char/player.js");
         this.load.script("script-kiro", "scripts/char/kiro.js");
 
@@ -113,8 +112,17 @@ class TakarTutorialScene extends Phaser.Scene {
          * REQUIRED
          */
         const scene = this;
-        this.isSaving = false;
-        this.worldScale = 3;
+
+
+
+
+
+
+
+
+        //Do this first so other objects can use it
+        this.scene.sendToBack();
+        this.uiScene = this.scene.get("UI");
 
 
 
@@ -127,6 +135,8 @@ class TakarTutorialScene extends Phaser.Scene {
          */
         this.input.setDefaultCursor("default");
 
+        this.cameras.main.setZoom(3);
+
         //Controls
         this.gameControls = new GameControls(scene, this);
         this.gameControls.hasSprintEverBeenPressed = sceneData.player.hasSprinted;
@@ -136,6 +146,7 @@ class TakarTutorialScene extends Phaser.Scene {
 
         //Lights
         this.lights.enable();
+        //this.lights.setAmbientColor(0x000000);
         this.lights.setAmbientColor(0x222222);
         //this.lights.setAmbientColor(0xA2936F);
 
@@ -161,6 +172,7 @@ class TakarTutorialScene extends Phaser.Scene {
          * Tilemap
          */
         this.worldMap = this.make.tilemap({ key: "map-tutorial" });
+
         this.tileset = this.worldMap.addTilesetImage("tera", "img-tileset-tera");
 
         this.layers = [];
@@ -169,14 +181,13 @@ class TakarTutorialScene extends Phaser.Scene {
 
         //this.layers[1].setCollision([ 20, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42 ]);
 
-        //Set scale & pipeline
+        //Set pipeline
         for (let i = 0; i < this.layers.length; i++) {
-            this.layers[i].setScale(this.worldScale);
             this.layers[i].setPipeline("Light2D");
         }
 
-        this.cameras.main.setBounds(0, 0, this.worldMap.widthInPixels * this.worldScale, this.worldMap.heightInPixels * this.worldScale);
-        this.physics.world.setBounds(0, 0, this.worldMap.widthInPixels * this.worldScale, this.worldMap.heightInPixels * this.worldScale);
+        this.cameras.main.setBounds(0, 0, this.worldMap.widthInPixels, this.worldMap.heightInPixels);
+        this.physics.world.setBounds(0, 0, this.worldMap.widthInPixels, this.worldMap.heightInPixels);
 
 
 
@@ -200,6 +211,7 @@ class TakarTutorialScene extends Phaser.Scene {
         this.kiro = new Kiro(this, sceneData.characters.kiro.x, sceneData.characters.kiro.y);
         this.kiro.setCurrentDialogueIndex(sceneData.characters.kiro.currentDialogueIndex);
         this.kiro.startMovement(sceneData.characters.kiro.currentMovementName);
+        this.kiro.setHandItem("hand-lamp");
         this.conversations.registerNpc(this.kiro);
 
 
@@ -214,16 +226,18 @@ class TakarTutorialScene extends Phaser.Scene {
          * Obstacles
          */
         this.obstacles = [
-            new StoneTorch(this, 380, 110),
-            new StoneTorch(this, 1060, 380),
-            new StoneTorch(this, 1060, 530),
-            new Bush1(this, 280, 190),
-            new Bush1(this, 490, 190),
-            new Bush1(this, 970, 280),
-            new Bush1(this, 1380, 620),
+            new StoneTorch(this, 125, 35),
+            new StoneTorch(this, 350, 125),
+            new StoneTorch(this, 350, 175),
+            new Bush1(this, 90, 60),
+            new Bush1(this, 160, 60),
+            new Bush1(this, 320, 90),
+            new Bush1(this, 460, 205),
         ];
 
-        this.doorway1 = new Doorway1(this, 2860, 572, "TakarTutorial", {  });
+        this.doorway1 = new Doorway1(this, 950, 190, "TakarTutorial", {  });
+
+
 
 
 
@@ -263,81 +277,10 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
-
-        /*
-         * Minimap
-         */
-        //this.minimapCam = this.cameras.add(20, 500, 200, 200);
-        //this.minimapCam.startFollow(this.player);
-        //this.minimapCam.setZoom(0.1);
-
-
-
-
-
-
-
-
-        /*
-         * Save Game
-         */
-        this.saveGameBtn = this.add.image(1270, 10, "img-ui-save-btn", 0);
-        this.saveGameBtn.setOrigin(1, 0);
-        this.saveGameBtn.setVisible(false);
-        this.saveGameBtn.setInteractive({ cursor: "pointer" });
-        this.saveGameBtn.setScrollFactor(0);
-        this.saveGameBtn.setAlpha(0.8);
-
-        this.saveGameBtn.on("pointerover", function() {
-            this.saveGameBtn.setAlpha(1);
-        }, this);
-        this.saveGameBtn.on("pointerout", function() {
-            this.saveGameBtn.setAlpha(0.8);
-        }, this);
-        this.saveGameBtn.on("pointerdown", function() {
-            this.saveGameBtn.setFrame(1);
-
-            this.saveGame();
-        }, this);
-        this.saveGameBtn.on("pointerup", function() {
-            scene.isSaving = true;
-            scene.player.setTalking(true);
-
-            this.saveGameBtn.setVisible(false);
-
-            this.saveGameBtn.setFrame(0);
-
-            const dialogue = new Dialogue(scene, [
-                new DialoguePart({
-                    text: "Game Saved!",
-                    type: 2
-                })
-            ]);
-
-            const btn = this.saveGameBtn;
-            dialogue.onComplete = function() {
-                scene.isSaving = true;
-                scene.player.setTalking(false);
-
-                btn.setVisible(true);
-            };
-
-            dialogue.start();
-
-        }, this);
-
-
-
-
-
-
-
-
-
         /*
          * Dialogue
          */
-        this.dialogue1 = new Dialogue(this, [
+        this.dialogue1 = new Dialogue(this.uiScene.dialogueManager, [
             new DialoguePart({
                 text: "Hey, " + this.player.getFirstName() + " you alright over there?",
                 type: 1,
@@ -375,20 +318,20 @@ class TakarTutorialScene extends Phaser.Scene {
 
                     scene.player.setTalking(true);
 
-                    const dialogue = new Dialogue(scene, [
+                    const dialogue = new Dialogue(scene.uiScene.dialogueManager, [
                         new DialoguePart({
                             text: "To move use the \"WASD\" keys.",
                             type: 2
                         })
                     ]);
 
-                    dialogue.start();
+                    scene.uiScene.dialogueManager.start(dialogue);
 
                 }
             });
         };
 
-        this.dialogue2 = new Dialogue(this, [
+        this.dialogue2 = new Dialogue(this.uiScene.dialogueManager, [
             new DialoguePart({
                 text: "Let's go already!",
                 type: 1
@@ -405,7 +348,7 @@ class TakarTutorialScene extends Phaser.Scene {
         };
 
 
-        this.kiro.addDialogue(new Dialogue(this, [
+        this.kiro.addDialogue(new Dialogue(this.uiScene.dialogueManager, [
             new DialoguePart({
                 text: "Finally, you made it.",
                 type: 1
@@ -430,13 +373,15 @@ class TakarTutorialScene extends Phaser.Scene {
             callback: function() {
 
                 if (sceneData.dialogue.current == 0) {
-                    this.dialogue1.start();
+                    this.uiScene.dialogueManager.start(this.dialogue1);
+                    scene.player.setTalking(true);
                 }
 
             },
             callbackScope: this,
             loop: false
         });
+        this.uiScene.saveGameBtn.setVisible(false);
 
 
 
@@ -452,7 +397,6 @@ class TakarTutorialScene extends Phaser.Scene {
             this.fadeScreen = this.add.image(640, 360, "img-ui-black-screen");
             this.fadeScreen.setScrollFactor(0);
             this.fadeScreen.setOrigin(0.5, 0.5);
-            this.fadeScreen.setScale(this.worldScale);
             this.fadeScreen.setAlpha(1);
             this.fadeScreen.setDepth(10000000);
 
@@ -505,23 +449,21 @@ class TakarTutorialScene extends Phaser.Scene {
 
     update() {
 
+        this.conversations.update();
+
         if (!this.dialogue2.hasBeenCompleted) {
             if (this.player.distanceMoved >= 350) {
                 if (!this.gameControls.getHasSprintEverBeenPressed()) {
-                    this.gameControls.setControlsEnabled(false);
-                    this.saveGameBtn.setVisible(false);
-                    this.dialogue2.start();
+                    this.uiScene.dialogueManager.start(this.dialogue2);
                 }
             }
         }
 
-        this.conversations.update();
-
         if (this.player.getTalking()) {
-            this.saveGameBtn.setVisible(false);
+            this.uiScene.saveGameBtn.setVisible(false);
             this.gameControls.setControlsEnabled(false);
         }else {
-            this.saveGameBtn.setVisible(true);
+            this.uiScene.saveGameBtn.setVisible(true);
             this.gameControls.setControlsEnabled(true);
         }
 
