@@ -14,7 +14,7 @@ const gameConfig = {
     height: 720,
     pixelArt: true,
     title: "Precion Origins - A Space Odyssey",
-    version: "0.0.4",
+    version: "0.0.6",
     physics: {
         default: "arcade",
         arcade: {
@@ -23,10 +23,8 @@ const gameConfig = {
     },
     scene: [
         StartMenuScene
-        //TestScene
     ]
 };
 
 const game = new Phaser.Game(gameConfig);
-//game.scene.start("TestScene");
 game.scene.start("StartMenu", { startAnims: true });

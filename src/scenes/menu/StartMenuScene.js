@@ -56,6 +56,9 @@ class StartMenuScene extends Phaser.Scene {
         this.load.audio("audio-intro-main", "sound/music/dawn-ilya-kuznetsov.mp3");
 
         //Scripts
+        this.load.script("script-dialogue-manager", "scripts/story/DialogueManager.js");
+        this.load.script("script-movement", "scripts/char/Movement.js");
+        this.load.script("script-npc", "scripts/char/NPC.js");
         this.load.script("script-dialogue", "scripts/story/Dialogue.js");
         this.load.script("script-dialogue-part", "scripts/story/DialoguePart.js");
         this.load.script("script-conversation-manager", "scripts/story/ConversationManager.js");
@@ -66,6 +69,7 @@ class StartMenuScene extends Phaser.Scene {
         this.load.setPath("./src/scenes/");
         this.load.sceneFile("PreludeScene", "game/cutscenes/PreludeScene.js");
         this.load.sceneFile("TakarTutorialScene", "game/takar/TakarTutorialScene.js");
+        this.load.sceneFile("UIScene", "menu/UIScene.js");
 
     }
 

@@ -18,7 +18,7 @@ const createWindow = () => {
 
     window.loadFile("index.html");
 
-    //window.webContents.openDevTools();
+    window.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {

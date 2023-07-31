@@ -37,12 +37,12 @@ class ConversationManager {
             const dist = Math.sqrt(Math.pow(this.player.x - npc.x, 2) + Math.pow(this.player.y - npc.y, 2));
 
             if (dist < this.talkRadius) {
-                //player.setInTalkRadius(true);
-                this.scene.gameControls.showHint("talk");
+                if (npc.getCanTalk() && npc.getCurrentDialogue() != null) {
+                    this.scene.gameControls.showHint("talk");
+                }
 
                 return true;
             }else {
-                //player.setInTalkRadius(false);
                 this.scene.gameControls.hideHint();
 
                 return false;
@@ -56,15 +56,17 @@ class ConversationManager {
             return;
         }
 
-        console.log("A");
-
         this.activeNpc = this.nearestNpc;
 
-        this.scene.gameControls.setControlsEnabled(false);
-        this.scene.player.setTalking(true);
+        if (!this.activeNpc.getCanTalk()) {return;}
+
+        if (this.scene.player != null) {
+            this.scene.player.setTalking(true);
+        }
 
         if (this.activeNpc.getCurrentDialogue() != null) {
-            this.activeNpc.currentDialogue.start();
+            this.scene.uiScene.dialogueManager.start(this.activeNpc.getCurrentDialogue());
+            this.activeNpc.setTalking(true);
         }else {
             this.stop();
         }
@@ -73,9 +75,14 @@ class ConversationManager {
 
     stop() {
 
-        this.activeNpc = null;
-        this.scene.player.setTalking(false);
-        this.scene.gameControls.setControlsEnabled(true);
+        if (this.activeNpc != null) {
+            this.activeNpc.setTalking(false);
+            this.activeNpc = null;
+        }
+
+        if (this.scene.player != null) {
+            this.scene.player.setTalking(false);
+        }
 
     }
 

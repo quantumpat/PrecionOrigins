@@ -1,0 +1,317 @@
+{
+  "anims": [
+    {
+      "key": "kiro-walk-down",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 1,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 2,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 3,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 2,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 6,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "kiro-walk-up",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 5,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 6,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 7,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 6,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 6,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "kiro-walk-left",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 9,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 10,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 11,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 10,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 5,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "kiro-walk-right",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 13,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 14,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 15,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 14,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 5,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "kiro-walk-down-tool",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 17,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 18,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 19,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 18,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 6,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "kiro-walk-up-tool",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 21,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 22,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 23,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 22,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 6,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "kiro-walk-left-tool",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 25,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 26,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 27,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 26,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 5,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "kiro-walk-right-tool",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-char-kiro",
+          "frame": 29,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 30,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 31,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-char-kiro",
+          "frame": 30,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 5,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    }
+  ],
+  "globalTimeScale": 1
+}
