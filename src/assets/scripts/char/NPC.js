@@ -4,18 +4,24 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
     /*
      * Constructor
      */
-    constructor(scene, x, y, texture) {
+    constructor(name, scene, x, y, texture) {
         super(scene, x, y);
+
+        this.name = name;
 
         this.setTexture(texture);
         this.setPosition(x, y);
 
         scene.physics.add.existing(this);
+        this.setCollideWorldBounds(true);
         scene.add.existing(this);
 
         this.body.setSize(6, 3);
         this.body.setOffset(13, 29);
         this.setImmovable(true);
+
+        //Always scale the npc's a little
+        this.setScale(1.25);
 
         this.walkSpeed = 20;
         this.isWalking = {
@@ -25,7 +31,7 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
             down: false
         };
 
-        this.walkAnimsKey = "";
+        this.animsKey = "";
 
         this.movements = [];
         this.currentMovement = null;
@@ -83,31 +89,39 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         }
 
         if (this.isWalking.left) {
+            this.direction = "left";
             this.body.setVelocityX(-this.walkSpeed);
             this.body.setVelocityY(0);
             this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.right) {
+            this.direction = "right";
             this.body.setVelocityX(this.walkSpeed);
             this.body.setVelocityY(0);
             this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.up) {
+            this.direction = "up";
             this.body.setVelocityY(-this.walkSpeed);
             this.body.setVelocityX(0);
             this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.down) {
+            this.direction = "down";
             this.body.setVelocityY(this.walkSpeed);
             this.body.setVelocityX(0);
             this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.left && this.isWalking.up) {
+            this.direction = "left";
             this.body.setVelocity(-this.walkSpeed);
             this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.left && this.isWalking.down) {
+            this.direction = "left";
             this.body.setVelocity(-this.walkSpeed, this.walkSpeed);
             this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.right && this.isWalking.up) {
+            this.direction = "right";
             this.body.setVelocity(this.walkSpeed, -this.walkSpeed);
             this.play(this.getAnimationKey(), true);
         }else if (this.isWalking.right && this.isWalking.down) {
+            this.direction = "right";
             this.body.setVelocity(this.walkSpeed);
             this.play(this.getAnimationKey(), true);
         }else {
@@ -151,7 +165,7 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
 
     getAnimationKey() {
 
-        let str = this.walkAnimsKey + "-";
+        let str = this.animsKey + "-";
 
         if (this.isWalking.left || this.isWalking.right || this.isWalking.up || this.isWalking.down) {
             str += "walk-";
@@ -217,12 +231,12 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.isWalking.down = down;
     }
 
-    getWalkAnimsKey() {
-        return this.walkAnimsKey;
+    getAnimsKey() {
+        return this.animsKey;
     }
 
-    setWalkAnimsKey(key) {
-        this.walkAnimsKey = key;
+    setAnimsKey(key) {
+        this.animsKey = key;
     }
 
     getCurrentMovement() {

@@ -11,7 +11,7 @@ class StoneTorch extends Phaser.Physics.Arcade.Sprite {
         this.body.setImmovable(true);
 
         this.light = scene.lights.addLight(x, y, 150);
-        this.light.setIntensity(1.2);
+        this.light.setIntensity(1);
         this.light.setColor(0xffaa68);
 
         this.soundFx = this.scene.sound.add("audio-fire-crackle");

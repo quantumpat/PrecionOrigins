@@ -7,7 +7,7 @@ const createWindow = () => {
         width: 1280,
         height: 720,
         autoHideMenuBar: true,
-        icon: "logo.png",
+        icon: "icons/logo.png",
         frame: false,
         resizable: false,
         webPreferences: {

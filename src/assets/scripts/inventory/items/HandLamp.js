@@ -12,7 +12,7 @@ class HandLamp extends Item {
         this.setFrameUpDown(0);
         this.setFrameLeftRight(1);
 
-        this.light = scene.lights.addLight(char.x, char.y, 75).setIntensity(0.9);
+        this.light = scene.lights.addLight(char.x, char.y, 100).setIntensity(0.7);
         this.light.setVisible(this.isActive);
 
     }

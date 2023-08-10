@@ -14,6 +14,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true);
 
+        this.setVisible(false);
+
+        //Always scale the player a little
+        this.setScale(1.25);
+
         //Body offset & size
         this.body.setSize(10, 3);
         this.body.setOffset(11, 29);
@@ -53,6 +58,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
 
+
+    /*
+     * Methods
+     */
     preUpdate(time, delta) {
 
         super.preUpdate(time, delta);
@@ -67,6 +76,42 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.handItem.update();
         }
 
+    }
+
+    load(data) {
+
+        this.setVisible(false);
+
+        this.setPosition(data.x, data.y);
+        this.setDirection(data.direction);
+        this.setLampOn(data.isLampOn);
+        this.setDistanceMoved(data.distanceMoved);
+
+        this.setHandItem(this.getItem(data.handItem.name));
+
+        this.setVisible(true);
+
+    }
+
+    generateSave() {
+        let playerData = {
+            x: this.x,
+            y: this.y,
+            direction: this.direction,
+            isLampOn: this.isLampOn,
+            distanceMoved: this.distanceMoved,
+            hasSprinted: this.hasSprintEverBeenPressed,
+            handItem: {
+                name: null
+            },
+            items: []
+        };
+
+        if (this.handItem != null) {
+            playerData.handItem.name = this.handItem.getName();
+        }
+
+        return playerData;
     }
 
     /*
@@ -309,7 +354,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     setLampOn(val) {
         if (val) {
             this.isLampOn = true;
-            this.setHandItem(this.items[0]);
+            this.setHandItem(this.getItem("hand-lamp"));
         }else {
             this.isLampOn = false;
             this.setHandItem(null);
@@ -318,6 +363,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     getItems() {
         return this.items;
+    }
+
+    setItems(items) {
+        this.items = items;
+    }
+
+    getItem(name) {
+
+        for (let i = 0; i < this.items.length; i++) {
+
+            if (this.items[i].name === name) {
+                return this.items[i];
+            }
+
+        }
+
     }
 
     setHandItem(item) {
@@ -344,7 +405,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     getHandItem() {
-        return handItem;
+        return this.handItem;
     }
 
     getCurrentAnimationKey() {

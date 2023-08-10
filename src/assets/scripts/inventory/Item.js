@@ -13,6 +13,8 @@ class Item {
         this.frameUpDown = 0;
         this.frameLeftRight = 0;
 
+        this.data = {};
+
         this.isActive = false;
 
         this.offsetsUp = {
@@ -148,6 +150,14 @@ class Item {
 
     setFrameLeftRight(frame) {
         this.frameLeftRight = frame;
+    }
+
+    getData() {
+        return this.data;
+    }
+
+    setData(data) {
+        this.data = data;
     }
 
     getActive() {
