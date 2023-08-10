@@ -5,13 +5,13 @@ class Kiro extends NPC {
      * Constructor
      */
     constructor(scene, x, y) {
-        super(scene, x, y, "img-char-kiro");
+        super("kiro", scene, x, y, "img-char-kiro");
 
         this.movements = [
             new Movement("kiro-0", this, 570, this.y, { faceDownWhenDone: true })
         ];
 
-        this.walkAnimsKey = "kiro";
+        this.animsKey = "kiro";
 
         this.firstName = "Kiro";
         this.lastName = "Kenito";

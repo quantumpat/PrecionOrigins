@@ -8,25 +8,49 @@ let sceneData = {
     finishedTutorial: false,
     currentTime: 11,
     player: {
-        x: 130,
-        y: 50,
+        x: 180,
+        y: 270,
         direction: "down",
         isLampOn: false,
         distanceMoved: 0,
         hasSprinted: false,
-        handItem: null
+        handItem: {
+            name: null
+        },
+        items: []
     },
-    characters: {
-        kiro: {
-            x: 350,
-            y: 145,
-            direction: "left",
-            canTalk: true,
-            currentDialogueIndex: 0,
-            currentMovementName: null,
-            handItem: "hand-lamp"
+    characters: [
+        {
+            name: "kiro",
+            data: {
+                x: 350,
+                y: 270,
+                direction: "left",
+                canTalk: true,
+                currentDialogueIndex: 0,
+                currentMovementName: null,
+                handItem: {
+                    name: "hand-lamp"
+                },
+                items: []
+            }
         }
-    },
+    ],
+    mobs: [
+        {
+            name: "panda",
+            data: {
+                x: 750,
+                y: 335,
+                direction: "left",
+                currentMovementName: null,
+                handItem: {
+                    name: null
+                },
+                items: []
+            }
+        }
+    ],
     dialogue: {
         current: 0
     }
@@ -68,22 +92,27 @@ class TakarTutorialScene extends Phaser.Scene {
         this.load.setPath("./src/assets/");
 
         //Images
-        this.load.image("img-tileset-tera", "tilesets/tera.png");
+        this.load.image("img-tileset-terrain", "tilesets/terrain.png");
         this.load.image("img-ui-black-screen", "images/ui/screens/black-screen.png");
-        this.load.image("img-obst-bush1", "images/obst/bush1.png");
         this.load.image("img-obst-doorway1", "images/obst/doorway1.png");
+        this.load.image("img-obst-tree0", "images/obst/tree0.png");
 
         //Animations
         this.load.animation("anims-player", "anims/char/player.json");
         this.load.animation("anims-kiro", "anims/char/kiro.json");
+        this.load.animation("anims-panda", "anims/mobs/panda.json");
         this.load.animation("anims-stone-torch", "anims/obst/stone-torch.json");
+        this.load.animation("anims-butterflies", "anims/mobs/butterflies.json");
 
         //Spritesheets
+        this.load.spritesheet("img-mob-butterfly", "images/mobs/butterfly.png", { frameWidth: 16, frameHeight: 64 });
+        this.load.spritesheet("img-mob-panda", "images/mobs/panda.png", { frameWidth: 48, frameHeight: 32 });
         this.load.spritesheet("img-char-player", "images/char/player.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("img-char-kiro", "images/char/kiro.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("img-obst-stone-torch", "images/obst/stone-torch.png", { frameWidth: 8, frameHeight: 24 });
         this.load.spritesheet("img-item-hand-lamp", "images/items/hand-lamp.png", { frameWidth: 8, frameHeight: 9 });
-        this.load.spritesheet("img-obst-tree1", "images/obst/tree1.png", { frameWidth: 64, frameHeight: 96 });
+        this.load.spritesheet("img-obst-barrel", "images/obst/barrel.png", { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet("img-obst-bush-med", "images/obst/bush-med.png", { frameWidth: 64, frameHeight: 32 });
 
         //Audio
         this.load.audio("audio-tribal-loop", "sound/music/tribal-loop-azteca-154482.mp3");
@@ -93,17 +122,19 @@ class TakarTutorialScene extends Phaser.Scene {
         this.load.audio("audio-item-equip", "sound/effects/item-equip.wav");
 
         //Scripts
-
+        this.load.script("script-mob-panda", "scripts/mobs/Panda.js");
         this.load.script("script-stone-torch", "scripts/obst/StoneTorch.js");
-        this.load.script("script-bush1", "scripts/obst/Bush1.js");
+        this.load.script("script-bush", "scripts/obst/Bush.js");
         this.load.script("script-doorway1", "scripts/obst/Doorway1.js");
         this.load.script("script-tree1", "scripts/obst/Tree1.js");
         this.load.script("script-item-hand-lamp", "scripts/inventory/items/HandLamp.js");
         this.load.script("script-player", "scripts/char/player.js");
         this.load.script("script-kiro", "scripts/char/kiro.js");
+        this.load.script("script-butterflies", "scripts/mobs/Butterflies.js");
+        this.load.script("script-barrel", "scripts/obst/Barrel.js");
 
         //Tilemaps
-        this.load.tilemapTiledJSON("map-tutorial", "maps/world/takar/tutorial.json");
+        this.load.tilemapTiledJSON("map-tutorial", "maps/world/takar/untitled.json");
 
     }
 
@@ -146,6 +177,9 @@ class TakarTutorialScene extends Phaser.Scene {
         //Conversations
         this.conversations = new ConversationManager(this);
 
+        //NPC's
+        this.npcManager = new NPCManager(this);
+
         //Lights
         this.lights.enable();
         //this.lights.setAmbientColor(0x000000);
@@ -170,18 +204,28 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
+
+
+
+
+
+
         /*
          * Tilemap
          */
         this.worldMap = this.make.tilemap({ key: "map-tutorial" });
 
-        this.tileset = this.worldMap.addTilesetImage("tera", "img-tileset-tera");
+        this.tileset = this.worldMap.addTilesetImage("terrain", "img-tileset-terrain");
 
         this.layers = [];
         this.layers[0] = this.worldMap.createLayer("ground", this.tileset);
-        this.layers[1] = this.worldMap.createLayer("ground-top", this.tileset);
+        this.layers[1] = this.worldMap.createLayer("ground-obst", this.tileset);
+        this.layers[2] = this.worldMap.createLayer("ground-over", this.tileset);
 
-        //this.layers[1].setCollision([ 20, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42 ]);
+        this.layers[2].setDepth(99999);
+
+        //this.worldMap.setCollision([ 335, 337, 497, 827, 882 ]);
+        this.layers[1].setCollisionBetween(0, 13960);
 
         //Set pipeline
         for (let i = 0; i < this.layers.length; i++) {
@@ -198,24 +242,45 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
+
+
+
+
+
+
+
+
+
+
         /*
          * Characters
          */
         //Player
         this.player = new Player(this, sceneData.player.x, sceneData.player.y);
-        this.player.setDirection(sceneData.player.direction);
-        this.player.setLampOn(sceneData.player.isLampOn);
-        this.player.setDistanceMoved(sceneData.player.distanceMoved);
+        this.player.load(sceneData.player);
         this.conversations.setPlayer(this.player);
         this.gameControls.setControlledSprite(this.player);
 
-        //NPC
-        this.kiro = new Kiro(this, sceneData.characters.kiro.x, sceneData.characters.kiro.y);
-        this.kiro.setCurrentDialogueIndex(sceneData.characters.kiro.currentDialogueIndex);
-        this.kiro.startMovement(sceneData.characters.kiro.currentMovementName);
-        this.kiro.setHandItem("hand-lamp");
-        this.kiro.setDirection(sceneData.characters.kiro.direction, true);
-        this.conversations.registerNpc(this.kiro);
+        //NPC's
+        this.npcManager.generateNpcs(sceneData.characters);
+        const kiro = this.npcManager.getNpc("kiro");
+
+
+
+
+        //Mobs
+        this.panda = new Panda(this, 750, 335);
+        this.panda.setDirection("left");
+        this.panda.startMovement("panda-right");
+
+        this.butterflies = new Butterflies(this);
+        this.butterflies.generate(10);
+
+
+
+
+
+
 
 
 
@@ -229,16 +294,30 @@ class TakarTutorialScene extends Phaser.Scene {
          * Obstacles
          */
         this.obstacles = [
-            new StoneTorch(this, 125, 35),
-            new StoneTorch(this, 350, 125),
-            new StoneTorch(this, 350, 175),
-            new Bush1(this, 90, 60),
-            new Bush1(this, 160, 60),
-            new Bush1(this, 320, 90),
-            new Bush1(this, 460, 205),
+            //new StoneTorch(this, 125, 235),
+            new Barrel(this, 90, 155, 13),
+            new Barrel(this, 170, 155, 13),
+            new Barrel(this, 950, 310, 9),
+            //new StoneTorch(this, 350, 250),
+            //new StoneTorch(this, 350, 340),
+            new Bush(this, 900, 190, 0),
+            new Bush(this, 20, 180, 1),
+            new Bush(this, 220, 181, 2),
+            new Bush(this, 260, 182, 3),
+            new Tree1(this, 80, 260),
+            new Tree1(this, 540, 400)
         ];
 
-        this.doorway1 = new Doorway1(this, 950, 190, "TakarTutorial", {  });
+        //this.doorway1 = new Doorway1(this, 950, 190, "TakarTutorial", {  });
+
+
+
+
+
+
+
+
+
 
 
 
@@ -253,10 +332,13 @@ class TakarTutorialScene extends Phaser.Scene {
          * Physics
          */
         //Tilemap
-        //this.physics.add.collider(this.player, this.layers[1]);
+        this.physics.add.collider(this.player, this.layers[1]);
 
         //Characters
-        this.physics.add.collider(this.player, this.kiro);
+        this.physics.add.collider(this.player, kiro);
+
+        //Mobs
+        this.physics.add.collider(this.player, this.panda);
 
         //Obstacles
         for (let i = 0; i < this.obstacles.length; i++) {
@@ -269,10 +351,30 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
 
+
+
+
+
+
+
+
+
+
         /*
          * Day / Night
          */
         //updateDayNight(this);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -334,6 +436,7 @@ class TakarTutorialScene extends Phaser.Scene {
             });
         };
 
+
         this.dialogue2 = new Dialogue(this.uiScene.dialogueManager, [
             new DialoguePart({
                 text: "Let's go already!",
@@ -351,7 +454,7 @@ class TakarTutorialScene extends Phaser.Scene {
         };
 
 
-        this.kiro.addDialogue(new Dialogue(this.uiScene.dialogueManager, [
+        kiro.addDialogue(new Dialogue(this.uiScene.dialogueManager, [
             new DialoguePart({
                 text: "Finally, you made it.",
                 type: 1
@@ -361,15 +464,14 @@ class TakarTutorialScene extends Phaser.Scene {
                 type: 1
             }),
             new DialoguePart({
-                text: "Follow " + this.kiro.getFirstName() + " down the path back to the village.",
+                text: "Follow " + kiro.getFirstName() + " down the path back to the village.",
                 type: 2
             })
         ]), function() {
-            scene.kiro.setCanTalk(false);
-            scene.kiro.nextDialogue();
-            scene.kiro.startMovement("kiro-0");
+            kiro.setCanTalk(false);
+            kiro.nextDialogue();
+            kiro.startMovement("kiro-0");
         });
-
 
 
         this.time.addEvent({
@@ -386,6 +488,14 @@ class TakarTutorialScene extends Phaser.Scene {
             loop: false
         });
         this.uiScene.saveGameBtn.setVisible(false);
+
+
+
+
+
+
+
+
 
 
 
@@ -416,23 +526,9 @@ class TakarTutorialScene extends Phaser.Scene {
     }
 
     saveGame() {
-        sceneData.player.x = this.player.x;
-        sceneData.player.y = this.player.y;
-        sceneData.player.direction = this.player.direction;
-        sceneData.player.isLampOn = this.player.getLampOn();
-        sceneData.player.distanceMoved = this.player.getDistanceMoved();
-        sceneData.player.hasSprinted = this.gameControls.hasSprintEverBeenPressed;
 
-        sceneData.characters.kiro.x = this.kiro.x;
-        sceneData.characters.kiro.y = this.kiro.y;
-        sceneData.characters.kiro.direction = this.kiro.getDirection();
-        sceneData.characters.kiro.currentDialogueIndex = this.kiro.getCurrentDialogueIndex();
-        sceneData.characters.kiro.canTalk = this.kiro.getCanTalk();
-        if (this.kiro.getCurrentMovement() == null) {
-            sceneData.characters.kiro.currentMovementName = null;
-        }else {
-            sceneData.characters.kiro.currentMovementName = this.kiro.getCurrentMovement().getName();
-        }
+        sceneData.player = this.player.generateSave();
+        sceneData.characters = this.npcManager.generateSave();
 
         if (loadData == null) {
             loadData = {
