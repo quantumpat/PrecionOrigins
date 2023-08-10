@@ -2,6 +2,10 @@
 let controlTutorialComplete = true;
 let fadeIn = false;
 
+
+/*
+ * Scene Data (for game loadig/saving)
+ */
 let loadData = null;
 let sceneData = {
     sceneName: "TakarTutorial",
@@ -17,7 +21,12 @@ let sceneData = {
         handItem: {
             name: null
         },
-        items: []
+        items: [
+            {
+                name: "hand-lamp",
+                data: {}
+            }
+        ]
     },
     characters: [
         {
@@ -32,7 +41,12 @@ let sceneData = {
                 handItem: {
                     name: "hand-lamp"
                 },
-                items: []
+                items: [
+                    {
+                        name: "hand-lamp",
+                        data: {}
+                    }
+                ]
             }
         }
     ],
@@ -122,15 +136,15 @@ class TakarTutorialScene extends Phaser.Scene {
         this.load.audio("audio-item-equip", "sound/effects/item-equip.wav");
 
         //Scripts
-        this.load.script("script-mob-panda", "scripts/mobs/Panda.js");
+        this.load.script("script-mob-panda", "scripts/mob/mobs/Panda.js");
         this.load.script("script-stone-torch", "scripts/obst/StoneTorch.js");
         this.load.script("script-bush", "scripts/obst/Bush.js");
         this.load.script("script-doorway1", "scripts/obst/Doorway1.js");
-        this.load.script("script-tree1", "scripts/obst/Tree1.js");
+        this.load.script("script-tree", "scripts/obst/Tree.js");
         this.load.script("script-item-hand-lamp", "scripts/inventory/items/HandLamp.js");
         this.load.script("script-player", "scripts/char/player.js");
-        this.load.script("script-kiro", "scripts/char/kiro.js");
-        this.load.script("script-butterflies", "scripts/mobs/Butterflies.js");
+        this.load.script("script-kiro", "scripts/char/npcs/Kiro.js");
+        this.load.script("script-butterflies", "scripts/mob/mobs/Butterflies.js");
         this.load.script("script-barrel", "scripts/obst/Barrel.js");
 
         //Tilemaps
@@ -304,8 +318,8 @@ class TakarTutorialScene extends Phaser.Scene {
             new Bush(this, 20, 180, 1),
             new Bush(this, 220, 181, 2),
             new Bush(this, 260, 182, 3),
-            new Tree1(this, 80, 260),
-            new Tree1(this, 540, 400)
+            new Tree(this, 80, 260),
+            new Tree(this, 540, 400)
         ];
 
         //this.doorway1 = new Doorway1(this, 950, 190, "TakarTutorial", {  });

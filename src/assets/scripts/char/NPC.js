@@ -54,9 +54,8 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.dialogues = [];
         this.currentDialogueIndex = 0;
 
-        this.items = [
-            new HandLamp(this.scene, this)
-        ];
+        this.items = new ItemManager(this);
+        this.items.addItem(new HandLamp(this.items));
         this.handItem = null;
 
     }
@@ -174,7 +173,7 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         str += this.direction;
 
         if (this.handItem != null) {
-            if (this.handItem.type === "TOOL") {
+            if (this.handItem.type === "tool") {
                 str += "-tool";
             }
         }
@@ -345,22 +344,13 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         return this.handItem;
     }
 
-    setHandItem(name) {
+    setHandItem(item) {
         if (this.handItem != null) {
             this.handItem.off();
             this.handItem.update();
         }
 
-        if (name === "none") {
-            this.handItem = null;
-            return;
-        }
-
-        for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].getName() === name) {
-                this.handItem = this.items[i];
-            }
-        }
+        this.handItem = item;
 
         if (this.handItem != null) {
             this.handItem.on();

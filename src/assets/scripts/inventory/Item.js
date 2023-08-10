@@ -1,14 +1,15 @@
 
 class Item {
 
-    constructor(scene, char, type, name, handImage, iconFrame) {
+    constructor(itemManager) {
 
-        this.scene = scene;
-        this.char = char;
-        this.type = type;
-        this.name = name;
-        this.handImage = handImage;
-        this.iconFrame = iconFrame;
+        this.itemManager = itemManager;
+        this.scene = this.itemManager.scene;
+        this.char = this.itemManager.char;
+        this.type = null;
+        this.name = null;
+        this.handImage = null;
+        this.iconFrame = 0;
 
         this.frameUpDown = 0;
         this.frameLeftRight = 0;
@@ -126,6 +127,7 @@ class Item {
 
     setHandImage(image) {
         this.handImage = image;
+        this.image.setTexture(this.handImage);
     }
 
     getIconFrame() {

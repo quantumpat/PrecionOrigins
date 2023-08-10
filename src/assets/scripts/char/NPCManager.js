@@ -34,7 +34,8 @@ class NPCManager {
             npc.setDirection(data.direction, true);
             npc.setCurrentDialogueIndex(data.currentDialogueIndex);
             npc.startMovement(data.currentMovementName);
-            npc.setHandItem(data.handItem.name);
+            npc.items.generateFromSave(data.items);
+            npc.setHandItem(npc.items.getItem(data.handItem.name));
             this.scene.conversations.registerNpc(npc);
 
             this.npcs.push(npc);
@@ -62,7 +63,7 @@ class NPCManager {
                     handItem: {
                         name: ""
                     },
-                    items: []
+                    items: npc.items.generateSaveData()
                 }
             };
 

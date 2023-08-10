@@ -39,9 +39,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.isLampOn = false;
 
-        this.items = [
-            new HandLamp(this.scene, this)
-        ];
+        this.items = new ItemManager(this);
         this.handItem = null;
 
         this.currentAnimationKey = "walk-down";
@@ -86,8 +84,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDirection(data.direction);
         this.setLampOn(data.isLampOn);
         this.setDistanceMoved(data.distanceMoved);
-
-        this.setHandItem(this.getItem(data.handItem.name));
+        this.setHandItem(this.items.getItem(data.handItem.name));
+        this.items.generateFromSave(data.items);
 
         this.setVisible(true);
 
@@ -104,7 +102,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             handItem: {
                 name: null
             },
-            items: []
+            items: this.items.generateSaveData()
         };
 
         if (this.handItem != null) {
@@ -262,7 +260,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         str += this.direction;
 
         if (this.handItem != null) {
-            if (this.handItem.type == "TOOL") {
+            if (this.handItem.type == "tool") {
                 str += "-tool";
             }
         }
@@ -354,7 +352,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     setLampOn(val) {
         if (val) {
             this.isLampOn = true;
-            this.setHandItem(this.getItem("hand-lamp"));
+            this.setHandItem(this.items.getItem("hand-lamp"));
         }else {
             this.isLampOn = false;
             this.setHandItem(null);
@@ -363,22 +361,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     getItems() {
         return this.items;
-    }
-
-    setItems(items) {
-        this.items = items;
-    }
-
-    getItem(name) {
-
-        for (let i = 0; i < this.items.length; i++) {
-
-            if (this.items[i].name === name) {
-                return this.items[i];
-            }
-
-        }
-
     }
 
     setHandItem(item) {

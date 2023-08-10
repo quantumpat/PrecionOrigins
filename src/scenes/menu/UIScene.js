@@ -11,7 +11,7 @@ class UIScene extends Phaser.Scene {
 
         //Spritesheets
         this.load.spritesheet("img-ui-dialogue-bg", "images/ui/screens/dialogue-bg.png", { frameWidth: 900, frameHeight: 200 });
-        this.load.spritesheet("img-ui-dialogue-option-btn", "images/ui/buttons/dialogue-option-btn.png", { frameWidth: 900, frameHeight: 30 });
+        this.load.spritesheet("img-ui-dialogue-option-btn", "images/ui/buttons/dialogue-option-btn.png", { frameWidth: 886, frameHeight: 30 });
         this.load.spritesheet("img-ui-save-btn", "images/ui/buttons/save-btn.png", { frameWidth: 32, frameHeight: 32 });
 
     }
