@@ -277,7 +277,6 @@ class GameControls {
         this.moveLeft = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.moveRight = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.sprint = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-        this.menu = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         this.lamp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.talk = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
@@ -312,16 +311,6 @@ class GameControls {
                     this.hideHint();
 
                 }
-            }
-
-            if (event.keyCode == this.menu.keyCode) {
-
-                if (this.scene.uiScene.isMenuOpen) {
-                    this.scene.uiScene.closeMenu();
-                }else {
-                    this.scene.uiScene.openMenu();
-                }
-
             }
 
         });

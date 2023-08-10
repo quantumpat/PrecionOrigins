@@ -232,6 +232,12 @@ class DialogueManager {
 
         this.currentDialogue = dialogue;
 
+        if (this.scene.gameScene != null) {
+            if (this.scene.gameScene.player != null) {
+                this.scene.gameScene.player.setTalking(true);
+            }
+        }
+
         if (this.currentDialogue.dialogueParts[0] != null) {
             this.currentDialogue.currentPart = 0;
             this.currentDialogue.currentPartData = this.currentDialogue.dialogueParts[this.currentDialogue.currentPart].getData();

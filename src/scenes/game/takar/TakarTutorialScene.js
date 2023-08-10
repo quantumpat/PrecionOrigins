@@ -460,8 +460,6 @@ class TakarTutorialScene extends Phaser.Scene {
         ]);
         this.dialogue2.onComplete = function() {
             scene.gameControls.setControlsEnabled(true);
-
-            scene.saveGameBtn.setVisible(true);
         };
 
 

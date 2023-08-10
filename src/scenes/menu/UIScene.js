@@ -129,6 +129,9 @@ class UIScene extends Phaser.Scene {
             this.hoverText.setText("");
         }, this);
         this.fullscreenBtn.on("pointerdown", function() {
+            this.fullscreenBtn.setFrame(2);
+        }, this);
+        this.fullscreenBtn.on("pointerup", function() {
             if (this.isFullscreen) {
                 console.log("fullscreen-off");
                 this.isFullscreen = false;
@@ -174,11 +177,17 @@ class UIScene extends Phaser.Scene {
 
 
         //Closing the menu (with key)
-        this.closeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.menuKeys = [ this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC), this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M) ];
         this.input.keyboard.on("keydown", event => {
 
-            if (event.keyCode == this.closeKey.keyCode) {
-                this.closeMenu();
+            for (let i = 0; i < this.menuKeys.length; i++) {
+                if (event.keyCode == this.menuKeys[i].keyCode) {
+                    if (this.isMenuOpen) {
+                        this.closeMenu();
+                    }else {
+                        this.openMenu();
+                    }
+                }
             }
 
         }, this);
