@@ -1,9 +1,12 @@
 
+
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("close-window-btn").onclick = function() {
         window.close();
     }
 });
+
 
 /*
  * Precion Origins - A Space Odyssey by Patrick Carroll

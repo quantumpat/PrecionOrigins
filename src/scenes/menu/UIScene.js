@@ -25,6 +25,7 @@ class UIScene extends Phaser.Scene {
 
         this.isSaving = false;
         this.isMenuOpen = false;
+        this.isFullscreen = false;
         const scene = this;
 
 
@@ -128,13 +129,14 @@ class UIScene extends Phaser.Scene {
             this.hoverText.setText("");
         }, this);
         this.fullscreenBtn.on("pointerdown", function() {
-            if (this.scale.isFullscreen) {
-                this.scale.stopFullscreen();
+            if (this.isFullscreen) {
+                console.log("fullscreen-off");
+                this.isFullscreen = false;
             }else {
-                this.scale.startFullscreen();
+                console.log("fullscreen-on");
+                this.isFullscreen = true;
             }
         }, this);
-
 
 
 
@@ -169,12 +171,31 @@ class UIScene extends Phaser.Scene {
         this.mainMenuContainer.add(this.hoverText);
 
 
+
+
+        //Closing the menu (with key)
+        this.closeKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.input.keyboard.on("keydown", event => {
+
+            if (event.keyCode == this.closeKey.keyCode) {
+                this.closeMenu();
+            }
+
+        }, this);
+
+
     }
 
     openMenu() {
 
         if (this.isMenuOpen) {
             return;
+        }
+
+        if (this.gameScene.player != null) {
+            if (this.gameScene.player.isTalking) {
+                return;
+            }
         }
 
         if (this.gameScene != null) {

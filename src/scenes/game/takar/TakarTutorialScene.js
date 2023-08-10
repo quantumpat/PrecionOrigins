@@ -38,9 +38,7 @@ let sceneData = {
                 canTalk: true,
                 currentDialogueIndex: 0,
                 currentMovementName: null,
-                handItem: {
-                    name: "hand-lamp"
-                },
+                handItem: "hand-lamp",
                 items: [
                     {
                         name: "hand-lamp",
@@ -481,7 +479,6 @@ class TakarTutorialScene extends Phaser.Scene {
                 type: 2
             })
         ]), function() {
-            kiro.setCanTalk(false);
             kiro.nextDialogue();
             kiro.startMovement("kiro-0");
         });

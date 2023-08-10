@@ -246,6 +246,12 @@ class DialogueManager {
             return;
         }
 
+        if (this.scene.gameScene != null) {
+            if (this.scene.gameScene.player != null) {
+                this.scene.gameScene.player.setTalking(false);
+            }
+        }
+
         this.isTextWriting = false;
         this.canMoveOn = false;
         this.currentDialogue.currentPart = -1;
@@ -256,6 +262,8 @@ class DialogueManager {
         this.currentDialogue.hasBeenCompleted = true;
         this.currentDialogue.stop();
         this.currentDialogue.onComplete();
+
+        this.scene.gameScene.conversations.stop();
 
         this.currentDialogue = null;
 

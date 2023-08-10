@@ -16,10 +16,6 @@ class Kiro extends NPC {
         this.firstName = "Kiro";
         this.lastName = "Kenito";
 
-        this.items = [
-            new HandLamp(this.scene, this)
-        ];
-
     }
 
 

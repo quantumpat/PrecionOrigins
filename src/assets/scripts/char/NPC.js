@@ -151,10 +151,22 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
 
         this.dialogues.push(dia);
 
+        if (this.dialogues[this.currentDialogueIndex] == null) {
+            this.setCanTalk(false);
+        }else {
+            this.setCanTalk(true);
+        }
+
     }
 
     nextDialogue() {
         this.currentDialogueIndex += 1;
+
+        if (this.dialogues[this.currentDialogueIndex] == null) {
+            this.setCanTalk(false);
+        }else {
+            this.setCanTalk(true);
+        }
     }
 
 
