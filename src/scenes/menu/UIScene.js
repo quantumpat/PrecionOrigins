@@ -9,36 +9,27 @@ class UIScene extends Phaser.Scene {
         //Assets
         this.load.setPath("./src/assets/");
 
+        //Images
+        this.load.image("img-ui-main-menu-bg", "images/ui/screens/main-menu-bg.png");
+
         //Spritesheets
+        this.load.spritesheet("img-ui-close-menu-btn", "images/ui/buttons/close-menu-btn.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("img-ui-dialogue-bg", "images/ui/screens/dialogue-bg.png", { frameWidth: 900, frameHeight: 200 });
         this.load.spritesheet("img-ui-dialogue-option-btn", "images/ui/buttons/dialogue-option-btn.png", { frameWidth: 886, frameHeight: 30 });
-        this.load.spritesheet("img-ui-save-btn", "images/ui/buttons/save-btn.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("img-ui-save-btn", "images/ui/buttons/save-btn.png", { frameWidth: 40, frameHeight: 40 });
 
     }
 
     create() {
 
         this.isSaving = false;
+        this.isMenuOpen = false;
         const scene = this;
 
 
 
-
-        this.gameScene = this.scene.get("TakarTutorial");
-        const gameScene = this.gameScene;
-
-
-
-
-
-
-        /*
-         * Hover Text
-         */
-        this.hoverText = this.add.text(1270, 706, "", { fontFamily: "pixel1", fontSize: 16, color: "#f0f0f0", align: "right" });
-        this.hoverText.setScrollFactor(0);
-        this.hoverText.setOrigin(1, 1);
-        this.hoverText.setDepth(100000000);
+        this.gameSceneKey = "TakarTutorial";
+        this.gameScene = this.scene.get(this.gameSceneKey);
 
 
 
@@ -57,6 +48,20 @@ class UIScene extends Phaser.Scene {
 
 
 
+        /*
+         * Main Menu
+         */
+        this.mainMenuContainer = this.add.container(0, 0);
+        this.mainMenuContainer.setScrollFactor(0);
+        this.mainMenuContainer.setVisible(false);
+        this.mainMenuContainer.setDepth(1);
+
+        this.darkScreen = this.add.image(640, 360, "img-ui-black-screen");
+        this.darkScreen.setAlpha(0.4);
+        this.mainMenuContainer.add(this.darkScreen);
+
+        this.mainMenuBg = this.add.image(640, 360, "img-ui-main-menu-bg");
+        this.mainMenuContainer.add(this.mainMenuBg);
 
 
         /*
@@ -64,34 +69,30 @@ class UIScene extends Phaser.Scene {
          */
         this.saveGameBtn = this.add.image(1270, 10, "img-ui-save-btn", 0);
         this.saveGameBtn.setOrigin(1, 0);
-        this.saveGameBtn.setVisible(false);
         this.saveGameBtn.setInteractive({ cursor: "pointer" });
-        this.saveGameBtn.setScrollFactor(0);
-        this.saveGameBtn.setAlpha(0.8);
 
         this.saveGameBtn.on("pointerover", function() {
-            this.saveGameBtn.setAlpha(1);
+            this.saveGameBtn.setFrame(1);
             this.hoverText.setText("Save Game");
         }, this);
         this.saveGameBtn.on("pointerout", function() {
-            this.saveGameBtn.setAlpha(0.8);
+            this.saveGameBtn.setFrame(0);
             this.hoverText.setText("");
         }, this);
         this.saveGameBtn.on("pointerdown", function() {
-            this.saveGameBtn.setFrame(1);
+            this.saveGameBtn.setFrame(2);
 
-            gameScene.saveGame();
+            if (this.gameScene != null) {
+                this.gameScene.saveGame();
+            }
         }, this);
         this.saveGameBtn.on("pointerup", function() {
             scene.isSaving = true;
 
-            if (gameScene.player != null) {
-                gameScene.player.setTalking(true);
-            }
-
             this.saveGameBtn.setVisible(false);
-
             this.saveGameBtn.setFrame(0);
+
+            this.closeMenu();
 
             const dialogue = new Dialogue(this.dialogueManager, [
                 new DialoguePart({
@@ -104,27 +105,83 @@ class UIScene extends Phaser.Scene {
             dialogue.onComplete = function() {
                 scene.isSaving = false;
 
-                if (gameScene.player != null) {
-                    gameScene.player.setTalking(false);
-                }
-
                 btn.setVisible(true);
             };
 
             this.dialogueManager.start(dialogue);
 
         }, this);
+        this.mainMenuContainer.add(this.saveGameBtn);
+
+
+
+        //Close Menu Btn
+        this.closeMenuBtn = this.add.image(100, 60, "img-ui-close-menu-btn");
+        this.closeMenuBtn.setOrigin(0, 0);
+        this.closeMenuBtn.setInteractive({ cursor: "pointer" });
+        this.mainMenuContainer.add(this.closeMenuBtn);
+
+        this.closeMenuBtn.on("pointerover", function() {
+            this.closeMenuBtn.setFrame(1);
+            this.hoverText.setText("Close");
+        }, this);
+        this.closeMenuBtn.on("pointerout", function() {
+            this.closeMenuBtn.setFrame(0);
+            this.hoverText.setText("");
+        }, this);
+        this.closeMenuBtn.on("pointerup", function() {
+            this.closeMenu();
+        }, this);
+
+
+
+
+        /*
+         * Hover Text
+         */
+        this.hoverText = this.add.text(640, 650, "", { fontFamily: "pixel1", fontSize: 16, color: "#f0f0f0", align: "right" });
+        this.hoverText.setScrollFactor(0);
+        this.hoverText.setOrigin(0.5, 1);
+        this.hoverText.setDepth(2);
+
+
+    }
+
+    openMenu() {
+
+        if (this.isMenuOpen) {
+            return;
+        }
+
+        if (this.gameScene != null) {
+            this.scene.pause(this.gameScene.scene.key);
+        }
+
+        this.isMenuOpen = true;
+        this.mainMenuContainer.setVisible(true);
+
+    }
+
+    closeMenu() {
+
+        if (!this.isMenuOpen) {
+            return;
+        }
+
+        if (this.gameScene != null) {
+            this.scene.resume(this.gameScene.scene.key);
+        }
+
+        this.isMenuOpen = false;
+        this.mainMenuContainer.setVisible(false);
 
     }
 
     switchTo(sceneKey) {
+        this.gameSceneKey = sceneKey;
         this.gameScene = this.scene.get(sceneKey);
-        const gameScene = this.gameScene;
-    }
 
-    update() {
-        this.hoverText.x = this.input.activePointer.x;
-        this.hoverText.y = this.input.activePointer.y;
+        this.scene.bringToTop();
     }
 
 }

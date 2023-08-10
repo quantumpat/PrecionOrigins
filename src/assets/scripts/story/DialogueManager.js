@@ -1,9 +1,9 @@
 
 class DialogueManager {
 
-    constructor(scene) {
+    constructor(uiScene) {
 
-        this.scene = scene;
+        this.scene = uiScene;
 
         this.dialogues = [];
         this.currentDialogue = null;
@@ -230,10 +230,6 @@ class DialogueManager {
 
         dialogue.start();
 
-        if (this.scene.gameScene.player != null) {
-            this.scene.gameScene.player.setTalking(true);
-        }
-
         this.currentDialogue = dialogue;
 
         if (this.currentDialogue.dialogueParts[0] != null) {
@@ -250,15 +246,6 @@ class DialogueManager {
             return;
         }
 
-        if (this.scene.gameScene.player != null) {
-            this.scene.gameScene.player.setTalking(false);
-        }
-        this.scene.gameScene.conversations.stop();
-
-        this.currentDialogue.onComplete();
-
-        this.currentDialogue.hasBeenCompleted = true;
-
         this.isTextWriting = false;
         this.canMoveOn = false;
         this.currentDialogue.currentPart = -1;
@@ -266,8 +253,12 @@ class DialogueManager {
         this.dialogueBg.setVisible(false);
         this.storyText.setVisible(false);
 
+        this.currentDialogue.hasBeenCompleted = true;
         this.currentDialogue.stop();
+        this.currentDialogue.onComplete();
+
         this.currentDialogue = null;
+
     }
 
     nextStoryPart() {

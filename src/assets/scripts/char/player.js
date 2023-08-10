@@ -84,8 +84,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDirection(data.direction);
         this.setLampOn(data.isLampOn);
         this.setDistanceMoved(data.distanceMoved);
-        this.setHandItem(this.items.getItem(data.handItem.name));
         this.items.generateFromSave(data.items);
+        this.setHandItem(this.items.getItem(data.handItem), false);
 
         this.setVisible(true);
 
@@ -99,14 +99,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             isLampOn: this.isLampOn,
             distanceMoved: this.distanceMoved,
             hasSprinted: this.hasSprintEverBeenPressed,
-            handItem: {
-                name: null
-            },
+            handItem: null,
             items: this.items.generateSaveData()
         };
 
         if (this.handItem != null) {
-            playerData.handItem.name = this.handItem.getName();
+            playerData.handItem = this.handItem.getName();
         }
 
         return playerData;
@@ -363,7 +361,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         return this.items;
     }
 
-    setHandItem(item) {
+    setHandItem(item, playNoise = true) {
         if (this.handItem != null) {
             this.handItem.off();
             this.handItem.update();
@@ -371,15 +369,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.handItem = item;
 
-        this.scene.sound.play("audio-item-equip", {
-            loop: false,
-            volume: 0.6,
-            source: {
-                x: 0,
-                y: 0,
-                refDistance: 1000000
-            }
-        });
+        if (playNoise) {
+            this.scene.sound.play("audio-item-equip", {
+                loop: false,
+                volume: 0.6,
+                source: {
+                    x: 0,
+                    y: 0,
+                    refDistance: 1000000
+                }
+            });
+        }
 
         if (this.handItem != null) {
             this.handItem.on();

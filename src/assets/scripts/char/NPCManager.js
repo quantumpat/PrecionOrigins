@@ -35,7 +35,7 @@ class NPCManager {
             npc.setCurrentDialogueIndex(data.currentDialogueIndex);
             npc.startMovement(data.currentMovementName);
             npc.items.generateFromSave(data.items);
-            npc.setHandItem(npc.items.getItem(data.handItem.name));
+            npc.setHandItem(npc.items.getItem(data.handItem));
             this.scene.conversations.registerNpc(npc);
 
             this.npcs.push(npc);
@@ -60,9 +60,7 @@ class NPCManager {
                     currentDialogueIndex: npc.currentDialogueIndex,
                     canTalk: npc.canTalk,
                     currentMovementName: null,
-                    handItem: {
-                        name: ""
-                    },
+                    handItem: null,
                     items: npc.items.generateSaveData()
                 }
             };
@@ -74,8 +72,7 @@ class NPCManager {
             }
 
             if (npc.getHandItem() != null) {
-                charData.data.handItem.name = npc.getHandItem().getName();
-                charData.data.handItem.data = npc.getHandItem().getData();
+                charData.data.handItem = npc.getHandItem().getName();
             }
 
             charArray.push(charData);

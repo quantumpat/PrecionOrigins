@@ -167,9 +167,8 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
         //Do this first so other objects can use it
-        this.scene.sendToBack();
         this.uiScene = this.scene.get("UI");
-        this.uiScene.switchTo("TakarTutorial");
+        this.uiScene.switchTo(this.scene.key);
 
 
 

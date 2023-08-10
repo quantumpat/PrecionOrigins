@@ -54,9 +54,7 @@ class MobManager {
                     y: mob.y,
                     direction: mob.direction,
                     currentMovementName: null,
-                    handItem: {
-                        name: ""
-                    },
+                    handItem: null,
                     items: []
                 }
             };
