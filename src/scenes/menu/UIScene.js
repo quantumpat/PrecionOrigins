@@ -17,6 +17,7 @@ class UIScene extends Phaser.Scene {
         this.load.spritesheet("img-ui-dialogue-bg", "images/ui/screens/dialogue-bg.png", { frameWidth: 900, frameHeight: 200 });
         this.load.spritesheet("img-ui-dialogue-option-btn", "images/ui/buttons/dialogue-option-btn.png", { frameWidth: 886, frameHeight: 30 });
         this.load.spritesheet("img-ui-save-btn", "images/ui/buttons/save-btn.png", { frameWidth: 40, frameHeight: 40 });
+        this.load.spritesheet("img-ui-fullscreen-btn", "images/ui/buttons/fullscreen-btn.png", { frameWidth: 40, frameHeight: 40 });
 
     }
 
@@ -64,12 +65,11 @@ class UIScene extends Phaser.Scene {
         this.mainMenuContainer.add(this.mainMenuBg);
 
 
-        /*
-         * Save Game
-         */
+        //Save Game
         this.saveGameBtn = this.add.image(1270, 10, "img-ui-save-btn", 0);
         this.saveGameBtn.setOrigin(1, 0);
         this.saveGameBtn.setInteractive({ cursor: "pointer" });
+        this.mainMenuContainer.add(this.saveGameBtn);
 
         this.saveGameBtn.on("pointerover", function() {
             this.saveGameBtn.setFrame(1);
@@ -111,7 +111,30 @@ class UIScene extends Phaser.Scene {
             this.dialogueManager.start(dialogue);
 
         }, this);
-        this.mainMenuContainer.add(this.saveGameBtn);
+
+
+        //Fullscreen Btn
+        this.fullscreenBtn = this.add.image(1170, 70, "img-ui-fullscreen-btn");
+        this.fullscreenBtn.setOrigin(1, 0);
+        this.fullscreenBtn.setInteractive({ cursor: "pointer" });
+        this.mainMenuContainer.add(this.fullscreenBtn);
+
+        this.fullscreenBtn.on("pointerover", function() {
+            this.fullscreenBtn.setFrame(1);
+            this.hoverText.setText("Fullscreen");
+        }, this);
+        this.fullscreenBtn.on("pointerout", function() {
+            this.fullscreenBtn.setFrame(0);
+            this.hoverText.setText("");
+        }, this);
+        this.fullscreenBtn.on("pointerdown", function() {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            }else {
+                this.scale.startFullscreen();
+            }
+        }, this);
+
 
 
 
@@ -143,6 +166,7 @@ class UIScene extends Phaser.Scene {
         this.hoverText.setScrollFactor(0);
         this.hoverText.setOrigin(0.5, 1);
         this.hoverText.setDepth(2);
+        this.mainMenuContainer.add(this.hoverText);
 
 
     }
