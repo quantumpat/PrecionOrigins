@@ -3,7 +3,7 @@ const path = require("path");
 const { app, BrowserWindow, ipcMain, ipcRenderer } = require("electron");
 
 const createWindow = () => {
-    win = new BrowserWindow({
+    const win = new BrowserWindow({
         width: 1280,
         height: 720,
         autoHideMenuBar: true,
@@ -13,14 +13,14 @@ const createWindow = () => {
         fullscreen: false,
         fullscreenable: true,
         webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
+            preload: path.join(__dirname, "./preload.js"),
             nodeIntegration: true
         }
     });
 
     win.setBackgroundColor("black");
 
-    win.loadFile("index.html");
+    win.loadFile("./game/index.html");
 
     win.webContents.openDevTools();
 

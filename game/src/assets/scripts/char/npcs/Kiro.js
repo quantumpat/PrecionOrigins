@@ -8,7 +8,7 @@ class Kiro extends NPC {
         super("kiro", scene, x, y, "img-char-kiro");
 
         this.movements = [
-            new Movement("kiro-0", this, 570, this.y, { faceDownWhenDone: true })
+            new Movement("kiro-0", this, 570, this.y, { canTalk: false, faceDownWhenDone: true })
         ];
 
         this.animsKey = "kiro";

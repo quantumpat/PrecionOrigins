@@ -263,7 +263,7 @@
           "visible": false
         }
       ],
-      "frameRate": 9,
+      "frameRate": 6,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -302,7 +302,7 @@
           "visible": false
         }
       ],
-      "frameRate": 9,
+      "frameRate": 6,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -464,7 +464,7 @@
           "visible": false
         }
       ],
-      "frameRate": 6,
+      "frameRate": 5,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -503,7 +503,7 @@
           "visible": false
         }
       ],
-      "frameRate": 6,
+      "frameRate": 5,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -620,7 +620,7 @@
           "visible": false
         }
       ],
-      "frameRate": 9,
+      "frameRate": 6,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -659,7 +659,7 @@
           "visible": false
         }
       ],
-      "frameRate": 9,
+      "frameRate": 6,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,

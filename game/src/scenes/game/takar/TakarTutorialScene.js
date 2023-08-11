@@ -282,7 +282,7 @@ class TakarTutorialScene extends Phaser.Scene {
         //Mobs
         this.panda = new Panda(this, 750, 335);
         this.panda.setDirection("left");
-        this.panda.startMovement("panda-right");
+        //this.panda.startMovement("panda-right");
 
         this.butterflies = new Butterflies(this);
         this.butterflies.generate(10);
@@ -479,6 +479,19 @@ class TakarTutorialScene extends Phaser.Scene {
         ]), function() {
             kiro.nextDialogue();
             kiro.startMovement("kiro-0");
+        });
+
+        kiro.addDialogue(new Dialogue(this.uiScene.dialogueManager, [
+            new DialoguePart({
+                text: "Ohh look, a Spotted Mountain Bear!",
+                type: 1
+            }),
+            new DialoguePart({
+                text: "Spotted Mountain Bear's are one of the rarest species of Takar, some people go an entire lifetime without seeing one.",
+                type: 1
+            })
+        ]), function() {
+            kiro.nextDialogue();
         });
 
 

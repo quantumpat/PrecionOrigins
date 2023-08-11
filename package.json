@@ -2,12 +2,44 @@
   "name": "precion-origins-a-space-odyssey",
   "version": "0.0.5",
   "description": "A space game made using phaser",
-  "main": "main.js",
+  "main": "game/main.js",
   "scripts": {
     "run": "electron .",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm"
+      },
+      "electronWinstallerConfig": {
+        "name": "precion_origins_a_space_odyssey"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "precionoriginsaspaceodyssey"
+      }
+    }
   },
   "keywords": [
     "space",
@@ -23,18 +55,22 @@
   "author": "Patrick Carroll",
   "license": "MIT",
   "devDependencies": {
-    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/cli": "^6.3.0",
     "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-dmg": "^6.2.1",
     "@electron-forge/maker-rpm": "^6.2.1",
     "@electron-forge/maker-squirrel": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
-    "@electron-forge/maker-dmg": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
-    "electron": "^25.3.1",
-    "phaser": "^3.60.0",
-    "electron-prebuilt-compile": "8.2.0"
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.2.4",
+    "electron-prebuilt-compile": "8.2.0",
+    "phaser": "^3.60.0"
   },
   "dependencies": {
+    "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0"
   }
 }

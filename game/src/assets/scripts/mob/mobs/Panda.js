@@ -14,7 +14,7 @@ class Panda extends Mob {
         this.body.setOffset(16, 10);
 
         this.movements = [
-            new Movement("panda-right", this, 900, this.y, {})
+            new Movement("panda-test", this, 100, this.y, { canTalk: false })
         ];
 
         this.setScale(1.25);

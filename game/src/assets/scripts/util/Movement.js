@@ -44,6 +44,12 @@ class Movement {
 
         this.inProgress = true;
 
+        if (this.data.canTalk != null) {
+            if (!this.data.canTalk) {
+                this.sprite.setCanTalk(false);
+            }
+        }
+
         this.updateSprite();
 
     }
@@ -156,6 +162,13 @@ class Movement {
         }
 
         if (this.inProgress) {
+
+            if (this.data.canTalk != null) {
+                if (!this.data.canTalk) {
+                    this.sprite.setCanTalk(false);
+                }
+            }
+
             if (Math.round(this.sprite.x) == this.finalX && Math.round(this.sprite.y) == this.finalY) {
                 this.end();
             }
@@ -170,6 +183,12 @@ class Movement {
         this.hasCompleted = true;
 
         this.inProgress = false;
+
+        if (this.data.canTalk != null) {
+            if (!this.data.canTalk) {
+                this.sprite.setCanTalk(true);
+            }
+        }
 
         this.sprite.setWalking({
             left: false,
