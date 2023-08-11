@@ -1,6 +1,6 @@
 {
   "name": "precion-origins-a-space-odyssey",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "A space game made using phaser",
   "main": "game/main.js",
   "scripts": {
