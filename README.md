@@ -1,4 +1,4 @@
-# Precion Origins - A Space Odyssey
+# Precion Origins - Epoch I
 
 ## How to play
 To play without a release version follow these steps:

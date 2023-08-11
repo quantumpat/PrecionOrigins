@@ -4,7 +4,7 @@ class Dialogue {
     /*
      * Constructor
      */
-    constructor(dialogueManager, dialogueParts) {
+    constructor(dialogueManager, dialogueParts = []) {
 
         this.dialogueManager = dialogueManager;
         this.dialogueParts = dialogueParts;

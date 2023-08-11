@@ -215,7 +215,7 @@ function createAfterClick(scene) {
             introHeader.setOrigin(0.5, 0.5);
             introHeader.setScrollFactor(0);
 
-            introSubheader = scene.add.text(640, 400, "A Space Odyssey", { fontFamily: "pixel1", fontSize: 32, color: "#ffffff", align: "center"}).setAlpha(0);
+            introSubheader = scene.add.text(640, 400, "Epoch I", { fontFamily: "pixel1", fontSize: 32, color: "#ffffff", align: "center"}).setAlpha(0);
             introSubheader.setShadow(0, 3, "#333333", 0, false, true);
             introSubheader.setOrigin(0.5, 0.5);
             introSubheader.setScrollFactor(0);

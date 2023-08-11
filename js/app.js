@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 const gameConfig = {
     pixelArt: true,
-    title: "Precion Origins - A Space Odyssey",
+    title: "Precion Origins - Epoch I",
     version: "0.0.7",
     scale: {
         mode: Phaser.Scale.FIT,

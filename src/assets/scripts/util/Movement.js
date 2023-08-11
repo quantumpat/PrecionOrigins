@@ -198,8 +198,8 @@ class Movement {
         });
 
         if (this.data != null) {
-            if (this.data.faceDownWhenDone) {
-                this.sprite.setDirection("down", true);
+            if (this.data.faceWhenDone != null) {
+                this.sprite.setDirection(this.data.faceWhenDone, true);
             }
         }
 

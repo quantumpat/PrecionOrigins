@@ -142,6 +142,10 @@ class TakarTutorialScene extends Phaser.Scene {
         this.load.script("script-kiro", "scripts/char/npcs/Kiro.js");
         this.load.script("script-butterflies", "scripts/mob/mobs/Butterflies.js");
         this.load.script("script-barrel", "scripts/obst/Barrel.js");
+        this.load.script("script-takar-tutorial-dialogue0", "scripts/story/dialogues/takar/tutorial/TakarTutorialDialogue0.js");
+        this.load.script("script-takar-tutorial-dialogue1", "scripts/story/dialogues/takar/tutorial/TakarTutorialDialogue1.js");
+        this.load.script("script-takar-tutorial-kiro-dialogue0", "scripts/story/dialogues/takar/tutorial/TakarTutorialKiroDialogue0.js");
+        this.load.script("script-takar-tutorial-kiro-dialogue1", "scripts/story/dialogues/takar/tutorial/TakarTutorialKiroDialogue1.js");
 
         //Tilemaps
         this.load.tilemapTiledJSON("map-tutorial", "maps/world/takar/untitled.json");
@@ -276,7 +280,8 @@ class TakarTutorialScene extends Phaser.Scene {
 
         //NPCs
         this.npcManager.generateNpcs(sceneData.characters);
-        const kiro = this.npcManager.getNpc("kiro");
+        this.kiro = this.npcManager.getNpc("kiro");
+        const kiro = this.kiro;
 
 
 
@@ -399,33 +404,8 @@ class TakarTutorialScene extends Phaser.Scene {
         /*
          * Dialogue
          */
-        this.dialogue1 = new Dialogue(this.uiScene.dialogueManager, [
-            new DialoguePart({
-                text: "Hey, " + this.player.getFirstName() + " you alright over there?",
-                type: 1,
-                options: [
-                    {
-                        text: "I'm alright"
-                    },
-                    {
-                        text: "Yes!"
-                    }
-                ]
-            }),
-            new DialoguePart({
-                text: "Ok good! It's getting dark out, we should probably head home.",
-                type: 1
-            }),
-            new DialoguePart({
-                text: "Here come over to me.",
-                type: 1
-            }),
-            new DialoguePart({
-                text: "To take out your lamp press \"E\".",
-                type: 2
-            })
-        ]);
-        this.dialogue1.onComplete = function() {
+        this.dialogue0 = new TakarTutorialDialogue0(this);
+        this.dialogue0.onComplete = function() {
             sceneData.dialogue.current = 1;
 
             scene.time.addEvent({
@@ -450,64 +430,26 @@ class TakarTutorialScene extends Phaser.Scene {
             });
         };
 
-
-        this.dialogue2 = new Dialogue(this.uiScene.dialogueManager, [
-            new DialoguePart({
-                text: "Let's go already!",
-                type: 1
-            }),
-            new DialoguePart({
-                text: "To sprint press the \"SHIFT\" key.",
-                type: 2
-            })
-        ]);
-        this.dialogue2.onComplete = function() {
+        this.dialogue1 = new TakarTutorialDialogue1(this);
+        this.dialogue1.onComplete = function() {
             scene.gameControls.setControlsEnabled(true);
         };
 
-
-        kiro.addDialogue(new Dialogue(this.uiScene.dialogueManager, [
-            new DialoguePart({
-                text: "Finally, you made it.",
-                type: 1
-            }),
-            new DialoguePart({
-                text: "We don't want to worry anyone back home, so lets get going!",
-                type: 1
-            }),
-            new DialoguePart({
-                text: "Follow " + kiro.getFirstName() + " down the path back to the village.",
-                type: 2
-            })
-        ]), function() {
+        kiro.addDialogue(new TakarTutorialKiroDialogue0(this), function() {
             kiro.nextDialogue();
             kiro.startMovement("kiro-0");
         });
-
-        kiro.addDialogue(new Dialogue(this.uiScene.dialogueManager, [
-            new DialoguePart({
-                text: "Ohh look, a Spotted Mountain Bear!",
-                type: 1
-            }),
-            new DialoguePart({
-                text: "Spotted Mountain Bear's are one of the rarest species of Takar.",
-                type: 1
-            }),
-            new DialoguePart({
-                text: "Some people go an entire lifetime without seeing one.",
-                type: 1
-            })
-        ]), function() {
+        kiro.addDialogue(new TakarTutorialKiroDialogue1(this), function() {
             kiro.nextDialogue();
+            kiro.startMovement("kiro-1");
         });
-
 
         this.time.addEvent({
             delay: 1000,
             callback: function() {
 
                 if (sceneData.dialogue.current == 0) {
-                    this.uiScene.dialogueManager.start(this.dialogue1);
+                    this.uiScene.dialogueManager.start(this.dialogue0);
                     scene.player.setTalking(true);
                 }
 
@@ -580,10 +522,10 @@ class TakarTutorialScene extends Phaser.Scene {
 
         this.conversations.update();
 
-        if (!this.dialogue2.hasBeenCompleted) {
+        if (!this.dialogue1.hasBeenCompleted) {
             if (this.player.distanceMoved >= 350) {
                 if (!this.gameControls.getHasSprintEverBeenPressed()) {
-                    this.uiScene.dialogueManager.start(this.dialogue2);
+                    this.uiScene.dialogueManager.start(this.dialogue1);
                 }
             }
         }
