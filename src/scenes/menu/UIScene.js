@@ -23,6 +23,7 @@ class UIScene extends Phaser.Scene {
 
     create() {
 
+        this.canOpenMenu = false;
         this.isSaving = false;
         this.isMenuOpen = false;
         this.isFullscreen = false;
@@ -198,6 +199,10 @@ class UIScene extends Phaser.Scene {
     openMenu() {
 
         if (this.isMenuOpen) {
+            return;
+        }
+
+        if (!this.canOpenMenu) {
             return;
         }
 

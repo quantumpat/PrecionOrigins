@@ -20,7 +20,7 @@ const createWindow = () => {
 
     win.setBackgroundColor("black");
 
-    win.loadFile("./game/index.html");
+    win.loadFile("./index.html");
 
     win.webContents.openDevTools();
 

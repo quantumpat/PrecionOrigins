@@ -71,6 +71,25 @@ class MobManager {
 
     }
 
+    addPhysics(sprite, ignoredSprites = []) {
+
+        for (let i = 0; i < this.mobs.length; i++) {
+
+            let canAdd = true;
+            for (let j = 0; j < ignoredSprites.length; j++) {
+                if (this.mobs[i] === ignoredSprites[j]) {
+                    canAdd = false;
+                }
+            }
+
+            if (canAdd) {
+                this.scene.physics.add.collider(sprite, this.mobs[i]);
+            }
+
+        }
+
+    }
+
 
     /*
      * Getters & Setters

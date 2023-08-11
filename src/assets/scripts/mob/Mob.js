@@ -276,8 +276,18 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     }
 
     setDirection(dir, updateFrame = false) {
-        if (!updateFrame) {
-            this.direction = dir;
+        this.direction = dir;
+
+        if (updateFrame) {
+            if (dir === "down") {
+                this.setFrame(0);
+            }else if (dir === "up") {
+                this.setFrame(4);
+            }else if (dir === "left") {
+                this.setFrame(8);
+            }else if (dir === "right") {
+                this.setFrame(12);
+            }
         }
     }
 

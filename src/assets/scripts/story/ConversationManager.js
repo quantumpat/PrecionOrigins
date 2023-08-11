@@ -77,6 +77,7 @@ class ConversationManager {
 
         if (this.activeNpc != null) {
             this.activeNpc.setTalking(false);
+            this.activeNpc.setCanTalk(true);
             this.activeNpc = null;
         }
 

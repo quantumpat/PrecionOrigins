@@ -58,6 +58,7 @@ class StartMenuScene extends Phaser.Scene {
         //Scripts
         this.load.script("script-item-manager", "scripts/inventory/ItemManager.js");
         this.load.script("script-npc-manager", "scripts/char/NPCManager.js");
+        this.load.script("script-mob-manager", "scripts/mob/MobManager.js");
         this.load.script("script-dialogue-manager", "scripts/story/DialogueManager.js");
         this.load.script("script-movement", "scripts/util/Movement.js");
         this.load.script("script-npc", "scripts/char/NPC.js");

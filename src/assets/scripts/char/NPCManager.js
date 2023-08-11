@@ -83,6 +83,25 @@ class NPCManager {
 
     }
 
+    addPhysics(sprite, ignoredSprites = []) {
+
+        for (let i = 0; i < this.npcs.length; i++) {
+
+            let canAdd = true;
+            for (let j = 0; j < ignoredSprites.length; j++) {
+                if (this.npcs[i] === ignoredSprites[j]) {
+                    canAdd = false;
+                }
+            }
+
+            if (canAdd) {
+                this.scene.physics.add.collider(sprite, this.npcs[i]);
+            }
+
+        }
+
+    }
+
 
     /*
      * Getters & Setters

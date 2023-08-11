@@ -28,6 +28,9 @@ class Chapter1Scene extends Phaser.Scene {
 
     create() {
 
+        const uiScene = this.scene.get("UI");
+        uiScene.canOpenMenu = false;
+
         this.input.setDefaultCursor("default");
 
         this.title = this.add.text(640, 300, 'Chapter I', { fontFamily: "pixel1", fontSize: 160, color: "#ffffff", align: "center" }).setAlpha(0);
@@ -72,6 +75,7 @@ class Chapter1Scene extends Phaser.Scene {
                     delay: 0,
                     onComplete: function() {
                         scene.sound.stopAll();
+                        uiScene.canOpenMenu = true;
                         scene.scene.start("TakarTutorial", { fadeIn: true });
                     }
                 });

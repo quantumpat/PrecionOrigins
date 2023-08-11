@@ -5,11 +5,12 @@ class Panda extends Mob {
      * Constructor
      */
     constructor(scene, x, y) {
+
         super("panda", scene, x, y, "img-mob-panda");
 
         //Body offset & size
-        this.setDirectionalBodySizes(32, 4, 18, 22);
-        this.setDirectionalOffsets(8, 28, 16, 10);
+        this.setDirectionalBodySizes(32, 4, 18, 16);
+        this.setDirectionalOffsets(8, 28, 16, 16);
         this.body.setSize(18, 22);
         this.body.setOffset(16, 10);
 
@@ -24,6 +25,7 @@ class Panda extends Mob {
         this.animsKey = "panda";
 
         this.hasIdleAnimation = true;
+
     }
 
 

@@ -52,13 +52,11 @@ let sceneData = {
         {
             name: "panda",
             data: {
-                x: 750,
+                x: 680,
                 y: 335,
                 direction: "left",
                 currentMovementName: null,
-                handItem: {
-                    name: null
-                },
+                handItem: null,
                 items: []
             }
         }
@@ -140,7 +138,7 @@ class TakarTutorialScene extends Phaser.Scene {
         this.load.script("script-doorway1", "scripts/obst/Doorway1.js");
         this.load.script("script-tree", "scripts/obst/Tree.js");
         this.load.script("script-item-hand-lamp", "scripts/inventory/items/HandLamp.js");
-        this.load.script("script-player", "scripts/char/player.js");
+        this.load.script("script-player", "scripts/char/Player.js");
         this.load.script("script-kiro", "scripts/char/npcs/Kiro.js");
         this.load.script("script-butterflies", "scripts/mob/mobs/Butterflies.js");
         this.load.script("script-barrel", "scripts/obst/Barrel.js");
@@ -167,6 +165,7 @@ class TakarTutorialScene extends Phaser.Scene {
         //Do this first so other objects can use it
         this.uiScene = this.scene.get("UI");
         this.uiScene.switchTo(this.scene.key);
+        this.uiScene.canOpenMenu = true;
 
 
 
@@ -190,6 +189,9 @@ class TakarTutorialScene extends Phaser.Scene {
 
         //NPC's
         this.npcManager = new NPCManager(this);
+
+        //Mobs
+        this.mobManager = new MobManager(this);
 
         //Lights
         this.lights.enable();
@@ -272,7 +274,7 @@ class TakarTutorialScene extends Phaser.Scene {
         this.conversations.setPlayer(this.player);
         this.gameControls.setControlledSprite(this.player);
 
-        //NPC's
+        //NPCs
         this.npcManager.generateNpcs(sceneData.characters);
         const kiro = this.npcManager.getNpc("kiro");
 
@@ -280,8 +282,9 @@ class TakarTutorialScene extends Phaser.Scene {
 
 
         //Mobs
-        this.panda = new Panda(this, 750, 335);
-        this.panda.setDirection("left");
+        this.mobManager.generateMobs(sceneData.mobs);
+        //this.panda = new Panda(this, 680, 335);
+        //this.panda.setDirection("left");
         //this.panda.startMovement("panda-right");
 
         this.butterflies = new Butterflies(this);
@@ -345,11 +348,11 @@ class TakarTutorialScene extends Phaser.Scene {
         //Tilemap
         this.physics.add.collider(this.player, this.layers[1]);
 
-        //Characters
-        this.physics.add.collider(this.player, kiro);
+        //NPCs
+        this.npcManager.addPhysics(this.player);
 
         //Mobs
-        this.physics.add.collider(this.player, this.panda);
+        this.mobManager.addPhysics(this.player);
 
         //Obstacles
         for (let i = 0; i < this.obstacles.length; i++) {
@@ -487,7 +490,11 @@ class TakarTutorialScene extends Phaser.Scene {
                 type: 1
             }),
             new DialoguePart({
-                text: "Spotted Mountain Bear's are one of the rarest species of Takar, some people go an entire lifetime without seeing one.",
+                text: "Spotted Mountain Bear's are one of the rarest species of Takar.",
+                type: 1
+            }),
+            new DialoguePart({
+                text: "Some people go an entire lifetime without seeing one.",
                 type: 1
             })
         ]), function() {
