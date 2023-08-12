@@ -80,30 +80,6 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.attackMovement = null;
         this.inAttackRadius = false;
         this.attackDelay = 1000;
-        this.attackLoop = scene.time.addEvent({
-            delay: 1000,
-            callback: function() {
-                if (this.isHostile) {
-
-                    this.updateAttacking();
-
-                    if (this.canMoveAtTarget) {
-
-                        if (this.attackMovement == null) {
-                            return;
-                        }
-
-                        if (!this.inAttackRadius) {
-                            this.attackMovement.start();
-                        }
-
-                    }
-
-                }
-            },
-            callbackScope: this,
-            loop: true
-        });
 
         //Lights
         this.setPipeline("Light2D");
@@ -136,14 +112,11 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         if (!this.isAttacking && !this.scene.uiScene.isSaving) {
             this.updateWalking();
-
-            this.updateAnimations();
-        }else if (this.isAttacking) {
-            this.body.setVelocity(0, 0);
         }else {
             this.body.setVelocity(0, 0);
-            this.anims.pause();
         }
+
+        this.updateAnimations();
 
     }
 
@@ -184,15 +157,15 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         }
 
         if (this.attackMovement != null) {
-            if (!this.inAttackRadius) {
-                if (this.canMoveAtTarget) {
-                    this.attackMovement.update();
+            if (!this.inAttackRadius && this.canMoveAtTarget) {
+                if (!this.attackMovement.inProgress) {
+                    this.attackMovement.start();
                 }
+                this.attackMovement.update();
             }else {
                 this.attackMovement.end();
             }
         }
-
     }
 
     updateWalking() {
@@ -236,16 +209,17 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
     updateAnimations() {
 
-        if (this.hasIdleAnimation) {
+        if (this.scene.uiScene.isSaving) {
+            this.anims.pause();
+            return;
+        }
+
+        if (this.hasIdleAnimation && !this.isAttacking) {
 
             this.anims.play(this.getAnimationKey(), true);
 
-        }else if (this.isAttacking) {
-
-            this.anims.play(this.getAnimationKey(), true);
-
-        }else {
-            this.stop();
+        }else if (!this.isAttacking) {
+            this.anims.stop();
         }
 
     }
