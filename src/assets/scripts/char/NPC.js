@@ -20,6 +20,8 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.body.setOffset(13, 29);
         this.setImmovable(true);
 
+        this.health = 1000;
+
         //Always scale the npc's a little
         this.setScale(1.25);
 
@@ -173,6 +175,22 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
     /*
      * Getters & Setters
      */
+
+    getName() {
+        return this.name;
+    }
+
+    setName(name) {
+        this.name = name;
+    }
+
+    getHealth() {
+        return this.health;
+    }
+
+    setHealth(health) {
+        this.health = health;
+    }
 
     getAnimationKey() {
 

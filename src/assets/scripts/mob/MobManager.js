@@ -33,6 +33,11 @@ class MobManager {
             let mob = new Panda(this.scene, data.x, data.y);
             mob.setDirection(data.direction, true);
             mob.startMovement(data.currentMovementName);
+            mob.setHealth(data.health);
+            if (data.attackTarget === "player") {
+                console.log("plau");
+                mob.startAttacking(this.scene.player);
+            }
 
             this.mobs.push(mob);
 
@@ -52,6 +57,8 @@ class MobManager {
                 data: {
                     x: mob.x,
                     y: mob.y,
+                    health: mob.health,
+                    attackTarget: null,
                     direction: mob.direction,
                     currentMovementName: null,
                     handItem: null,
@@ -59,8 +66,14 @@ class MobManager {
                 }
             };
 
+            console.log(mob.x);
+
             if (mob.getCurrentMovement() != null) {
                 mobData.data.currentMovementName = mob.getCurrentMovement().getName();
+            }
+
+            if (mob.getAttackTarget() === this.scene.player) {
+                mobData.data.attackTarget = "player";
             }
 
             mobArray.push(mobData);

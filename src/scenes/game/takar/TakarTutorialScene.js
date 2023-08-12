@@ -18,9 +18,8 @@ let sceneData = {
         isLampOn: false,
         distanceMoved: 0,
         hasSprinted: false,
-        handItem: {
-            name: null
-        },
+        health: 1000,
+        handItem: null,
         items: [
             {
                 name: "hand-lamp",
@@ -36,6 +35,7 @@ let sceneData = {
                 y: 270,
                 direction: "left",
                 canTalk: true,
+                health: 1000,
                 currentDialogueIndex: 0,
                 currentMovementName: null,
                 handItem: "hand-lamp",
@@ -54,6 +54,8 @@ let sceneData = {
             data: {
                 x: 680,
                 y: 335,
+                health: 100,
+                attackTarget: null,
                 direction: "left",
                 currentMovementName: null,
                 handItem: null,
@@ -288,9 +290,6 @@ class TakarTutorialScene extends Phaser.Scene {
 
         //Mobs
         this.mobManager.generateMobs(sceneData.mobs);
-        //this.panda = new Panda(this, 680, 335);
-        //this.panda.setDirection("left");
-        //this.panda.startMovement("panda-right");
 
         this.butterflies = new Butterflies(this);
         this.butterflies.generate(10);
@@ -358,10 +357,12 @@ class TakarTutorialScene extends Phaser.Scene {
 
         //Mobs
         this.mobManager.addPhysics(this.player);
+        this.mobManager.addPhysics(this.layers[1]);
 
         //Obstacles
         for (let i = 0; i < this.obstacles.length; i++) {
             this.physics.add.collider(this.player, this.obstacles[i]);
+            this.mobManager.addPhysics(this.obstacles[i]);
         }
 
 
@@ -499,6 +500,7 @@ class TakarTutorialScene extends Phaser.Scene {
 
         sceneData.player = this.player.generateSave();
         sceneData.characters = this.npcManager.generateSave();
+        sceneData.mobs = this.mobManager.generateSave();
 
         if (loadData == null) {
             loadData = {

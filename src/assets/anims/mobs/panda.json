@@ -189,7 +189,7 @@
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
-      "repeat": -1,
+      "repeat": 0,
       "repeatDelay": 0,
       "yoyo": false,
       "showOnStart": false,
@@ -228,7 +228,7 @@
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
-      "repeat": -1,
+      "repeat": 0,
       "repeatDelay": 0,
       "yoyo": false,
       "showOnStart": false,
@@ -267,7 +267,7 @@
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
-      "repeat": -1,
+      "repeat": 0,
       "repeatDelay": 0,
       "yoyo": false,
       "showOnStart": false,
@@ -306,7 +306,187 @@
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
-      "repeat": -1,
+      "repeat": 0,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "panda-attack-down",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-mob-panda",
+          "frame": 32,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 33,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 34,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 35,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 32,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": 0,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "panda-attack-up",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-mob-panda",
+          "frame": 36,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 37,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 38,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 39,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 36,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": 0,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "panda-attack-left",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-mob-panda",
+          "frame": 40,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 41,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 42,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 43,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 40,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": 0,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "panda-attack-right",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "img-mob-panda",
+          "frame": 44,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 45,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 46,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 47,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "img-mob-panda",
+          "frame": 44,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "duration": 1.5,
+      "skipMissedFrames": false,
+      "delay": 0,
+      "repeat": 0,
       "repeatDelay": 0,
       "yoyo": false,
       "showOnStart": false,

@@ -14,6 +14,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true);
 
+        this.setMass(1);
+
         this.setVisible(false);
 
         //Always scale the player a little
@@ -30,6 +32,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.currentSpeed = this.walkSpeed;
 
         this.distanceMoved = 0;
+
+        this.health = 1000;
 
         this.isSprinting = false;
         this.isStanding = true;
@@ -83,6 +87,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setPosition(data.x, data.y);
         this.setDirection(data.direction);
         this.setLampOn(data.isLampOn);
+        this.setHealth(data.health);
         this.setDistanceMoved(data.distanceMoved);
         this.items.generateFromSave(data.items);
         this.setHandItem(this.items.getItem(data.handItem), false);
@@ -97,6 +102,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             y: this.y,
             direction: this.direction,
             isLampOn: this.isLampOn,
+            health: this.health,
             distanceMoved: this.distanceMoved,
             hasSprinted: this.hasSprintEverBeenPressed,
             handItem: null,
@@ -412,6 +418,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     setOnTalk(callback) {
         this.onTalk = callback;
+    }
+
+    getHealth() {
+        return this.health;
+    }
+
+    setHealth(health) {
+        this.health = health;
     }
 
 }

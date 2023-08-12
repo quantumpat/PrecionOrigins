@@ -19,7 +19,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true);
 
-        this.setImmovable(true);
+        this.setMass(50000);
 
         this.animsKey = "none";
 
@@ -49,6 +49,9 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             }
         };
 
+        //Taming
+        this.isTamed = false;
+        this.isTamedBy = null;
 
         this.hasIdleAnimation = false;
 
@@ -66,7 +69,40 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.currentMovement = null;
         this.movements = [];
 
+        //Attacking
+        this.health = 100;
+        this.isHostile = false;
         this.isAttacking = false;
+        this.attackTarget = null;
+        this.attackDamage = 10;
+        this.attackRadius = 20;
+        this.canMoveAtTarget = true;
+        this.attackMovement = null;
+        this.inAttackRadius = false;
+        this.attackLoop = scene.time.addEvent({
+            delay: 1000,
+            callback: function() {
+                if (this.isHostile) {
+
+                    this.updateAttacking();
+
+                    if (this.canMoveAtTarget) {
+
+                        if (this.attackMovement == null) {
+                            return;
+                        }
+
+                        if (!this.inAttackRadius) {
+                            this.attackMovement.start();
+                        }
+
+                    }
+
+                }
+            },
+            callbackScope: this,
+            loop: true
+        });
 
         //Lights
         this.setPipeline("Light2D");
@@ -95,10 +131,14 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
+        this.updateAttacking();
+
         if (!this.isAttacking && !this.scene.uiScene.isSaving) {
             this.updateWalking();
 
             this.updateAnimations();
+        }else if (this.isAttacking) {
+            this.body.setVelocity(0, 0);
         }else {
             this.body.setVelocity(0, 0);
             this.anims.pause();
@@ -116,6 +156,39 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             if (this.movements[i].getName() === name) {
                 this.currentMovement = this.movements[i];
                 this.currentMovement.start();
+            }
+        }
+
+    }
+
+    updateAttacking() {
+
+        if (!this.isHostile) {
+            return;
+        }
+
+        let changeX = this.x - this.attackTarget.x;
+        let changeY = this.y - this.attackTarget.y;
+
+        let dist = Math.sqrt(Math.pow(changeX, 2) + Math.pow(changeY, 2));
+
+        if (dist <= this.attackRadius) {
+
+            this.inAttackRadius = true;
+
+            this.attack();
+
+        }else {
+            this.inAttackRadius = false;
+        }
+
+        if (this.attackMovement != null) {
+            if (!this.inAttackRadius) {
+                if (this.canMoveAtTarget) {
+                    this.attackMovement.update();
+                }
+            }else {
+                this.attackMovement.end();
             }
         }
 
@@ -166,10 +239,45 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
             this.anims.play(this.getAnimationKey(), true);
 
+        }else if (this.isAttacking) {
+
+            this.anims.play(this.getAnimationKey(), true);
+
         }else {
             this.stop();
         }
 
+    }
+
+    startAttacking(target) {
+
+        this.setAttackTarget(target);
+        this.attackMovement = new Movement("mob-" + this.name + "-attack", this, this.attackTarget.x, this.attackTarget.y, { atTarget: this.attackTarget });
+        this.isHostile = true;
+        this.attackMovement.start();
+
+    }
+
+    attack() {
+        if (this.isAttacking) {
+            return;
+        }
+
+        this.isAttacking = true;
+
+        this.attackTarget.health -= this.attackDamage;
+
+        this.anims.play(this.getAnimationKey(), true);
+
+        this.scene.time.addEvent({
+            delay: 750,
+            callback: function() {
+                this.isAttacking = false;
+            },
+            callbackScope: this,
+            loop: false
+        });
+        console.log(this.attackTarget.health);
     }
 
 
@@ -182,7 +290,9 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         let str = this.animsKey + "-";
 
         if (this.hasIdleAnimation) {
-            if (this.isWalking.left === true || this.isWalking.right === true || this.isWalking.up === true || this.isWalking.down === true) {
+            if (this.isAttacking) {
+                str += "attack-";
+            }else if (this.isWalking.left === true || this.isWalking.right === true || this.isWalking.up === true || this.isWalking.down === true) {
                 str += "walk-";
             }else {
                 str += "idle-";
@@ -335,8 +445,76 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         return this.currentMovement;
     }
 
+    getHealth() {
+        return this.health;
+    }
+
+    setHealth(health) {
+        this.health = health;
+    }
+
+    getHostile() {
+        return this.isHostile;
+    }
+
+    setHostile(hostile) {
+        this.isHostile = hostile;
+    }
+
     getAttacking() {
         return this.isAttacking;
+    }
+
+    setAttacking(attacking) {
+        this.isAttacking = attacking;
+    }
+
+    getAttackTarget() {
+        return this.attackTarget;
+    }
+
+    setAttackTarget(target) {
+        this.attackTarget = target;
+    }
+
+    getAttackRadius() {
+        return this.attackRadius;
+    }
+
+    setAttackRadius(radius) {
+        this.attackRadius = radius;
+    }
+
+    getAttackDamage() {
+        return this.attackDamage;
+    }
+
+    setAttackDamage(damage) {
+        this.attackDamage = damage;
+    }
+
+    getCanMoveAtTarget() {
+        return this.canMoveAtTarget;
+    }
+
+    setCanMoveAtTarget(canMove) {
+        this.canMoveAtTarget = canMove;
+    }
+
+    getAttackMovement() {
+        return this.attackMovement;
+    }
+
+    setAttackMovement(movement) {
+        this.attackMovement = movement;
+    }
+
+    getInAttackRadius() {
+        return this.inAttackRadius;
+    }
+
+    getAttackLoop() {
+        return this.attackLoop;
     }
 
 }

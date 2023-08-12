@@ -28,9 +28,9 @@ class Movement {
     /*
      * Methods
      */
-    start() {
+    start(ignoreIfStarted = true) {
 
-        if (this.inProgress) {
+        if (this.inProgress && ignoreIfStarted) {
             return;
         }
 
@@ -55,6 +55,13 @@ class Movement {
     }
 
     updateSprite() {
+
+        if (this.data != null) {
+            if (this.data.atTarget != null) {
+                this.finalX = this.data.atTarget.x;
+                this.finalY = this.data.atTarget.y;
+            }
+        }
 
         this.changeX = Math.round(this.finalX) - Math.round(this.sprite.x);
         this.changeY = Math.round(this.finalY) - Math.round(this.sprite.y);

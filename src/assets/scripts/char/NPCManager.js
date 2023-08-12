@@ -34,6 +34,7 @@ class NPCManager {
             npc.setDirection(data.direction, true);
             npc.setCurrentDialogueIndex(data.currentDialogueIndex);
             npc.startMovement(data.currentMovementName);
+            npc.setHealth(data.health);
             npc.items.generateFromSave(data.items);
             npc.setHandItem(npc.items.getItem(data.handItem));
             this.scene.conversations.registerNpc(npc);
@@ -56,6 +57,7 @@ class NPCManager {
                 data: {
                     x: npc.x,
                     y: npc.y,
+                    health: npc.health,
                     direction: npc.direction,
                     currentDialogueIndex: npc.currentDialogueIndex,
                     canTalk: npc.canTalk,
