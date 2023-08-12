@@ -342,7 +342,7 @@
         },
         {
           "key": "img-mob-panda",
-          "frame": 32,
+          "frame": 0,
           "duration": 0,
           "visible": false
         }
@@ -387,7 +387,7 @@
         },
         {
           "key": "img-mob-panda",
-          "frame": 36,
+          "frame": 4,
           "duration": 0,
           "visible": false
         }
@@ -432,7 +432,7 @@
         },
         {
           "key": "img-mob-panda",
-          "frame": 40,
+          "frame": 8,
           "duration": 0,
           "visible": false
         }
@@ -477,7 +477,7 @@
         },
         {
           "key": "img-mob-panda",
-          "frame": 44,
+          "frame": 12,
           "duration": 0,
           "visible": false
         }

@@ -19,7 +19,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true);
 
-        this.setMass(50000);
+        this.setPushable(false);
 
         this.animsKey = "none";
 
@@ -75,10 +75,11 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.isAttacking = false;
         this.attackTarget = null;
         this.attackDamage = 10;
-        this.attackRadius = 20;
+        this.attackRadius = 30;
         this.canMoveAtTarget = true;
         this.attackMovement = null;
         this.inAttackRadius = false;
+        this.attackDelay = 1000;
         this.attackLoop = scene.time.addEvent({
             delay: 1000,
             callback: function() {
@@ -270,7 +271,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.anims.play(this.getAnimationKey(), true);
 
         this.scene.time.addEvent({
-            delay: 750,
+            delay: this.attackDelay,
             callback: function() {
                 this.isAttacking = false;
             },
@@ -515,6 +516,14 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
     getAttackLoop() {
         return this.attackLoop;
+    }
+
+    getAttackDelay() {
+        return this.attackDelay;
+    }
+
+    setAttackDelay(ms) {
+        this.attackDelay = ms;
     }
 
 }
