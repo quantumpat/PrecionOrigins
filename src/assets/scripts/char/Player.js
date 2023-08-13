@@ -34,6 +34,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.distanceMoved = 0;
 
         this.health = 1000;
+        this.attackedBy = [];
 
         this.isSprinting = false;
         this.isStanding = true;

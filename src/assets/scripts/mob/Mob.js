@@ -224,11 +224,14 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    startAttacking(target) {
+    startAttack(target) {
 
         this.setAttackTarget(target);
         this.attackMovement = new Movement("mob-" + this.name + "-attack", this, this.attackTarget.x, this.attackTarget.y, { atTarget: this.attackTarget });
         this.isHostile = true;
+        if (target.attackedBy != null) {
+            target.attackedBy.push(this);
+        }
         this.attackMovement.start();
 
     }

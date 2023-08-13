@@ -85,7 +85,11 @@ class UIScene extends Phaser.Scene {
             this.saveGameBtn.setFrame(2);
 
             if (this.gameScene != null) {
-                this.gameScene.saveGame();
+                if (this.gameScene.player != null) {
+                    if (this.gameScene.player.attackedBy.length == 0) {
+                        this.gameScene.saveGame();
+                    }
+                }
             }
         }, this);
         this.saveGameBtn.on("pointerup", function() {
@@ -96,26 +100,48 @@ class UIScene extends Phaser.Scene {
 
             this.closeMenu();
 
-            const dialogue = new Dialogue(this.dialogueManager, [
-                new DialoguePart({
-                    text: "Game Saved!",
-                    type: 2
-                })
-            ]);
+            if (this.gameScene != null) {
+                if (this.gameScene.player != null) {
+                    if (this.gameScene.player.attackedBy.length == 0) {
+                        const dialogue = new Dialogue(this.dialogueManager, [
+                            new DialoguePart({
+                                text: "Game Saved!",
+                                type: 2
+                            })
+                        ]);
 
-            const btn = this.saveGameBtn;
-            dialogue.onComplete = function() {
-                scene.isSaving = false;
+                        const btn = this.saveGameBtn;
+                        dialogue.onComplete = function() {
+                            scene.isSaving = false;
 
-                btn.setVisible(true);
-            };
+                            btn.setVisible(true);
+                        };
 
-            this.dialogueManager.start(dialogue);
+                        this.dialogueManager.start(dialogue);
+                    }else {
+                        const dialogue = new Dialogue(this.dialogueManager, [
+                            new DialoguePart({
+                                text: "Game cannot be saved while player is under attack.",
+                                type: 2
+                            })
+                        ]);
+
+                        const btn = this.saveGameBtn;
+                        dialogue.onComplete = function() {
+                            scene.isSaving = false;
+
+                            btn.setVisible(true);
+                        };
+
+                        this.dialogueManager.start(dialogue);
+                    }
+                }
+            }
 
         }, this);
 
 
-        //Fullscreen Btn
+        //Fullscreen Button
         this.fullscreenBtn = this.add.image(1170, 70, "img-ui-fullscreen-btn");
         this.fullscreenBtn.setOrigin(1, 0);
         this.fullscreenBtn.setInteractive({ cursor: "pointer" });
@@ -194,6 +220,15 @@ class UIScene extends Phaser.Scene {
         }, this);
 
 
+    }
+
+    save() {
+        const dialogue = new Dialogue(this.dialogueManager, [
+            new DialoguePart({
+                text: "Game Saved!",
+                type: 2
+            })
+        ]);
     }
 
     openMenu() {

@@ -35,8 +35,7 @@ class MobManager {
             mob.startMovement(data.currentMovementName);
             mob.setHealth(data.health);
             if (data.attackTarget === "player") {
-                console.log("plau");
-                mob.startAttacking(this.scene.player);
+                mob.startAttack(this.scene.player);
             }
 
             this.mobs.push(mob);
