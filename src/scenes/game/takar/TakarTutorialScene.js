@@ -458,7 +458,6 @@ class TakarTutorialScene extends Phaser.Scene {
             callbackScope: this,
             loop: false
         });
-        this.uiScene.saveGameBtn.setVisible(false);
 
 
 

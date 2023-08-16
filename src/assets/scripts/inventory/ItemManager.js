@@ -27,7 +27,15 @@ class ItemManager {
 
             }
 
-            this.items.push(item);
+            for (let j = 0; j < this.items.length; j++) {
+                if (this.items[j].name === data.name) {
+                    if (this.items[j].amount < this.items[j].maxStack) {
+                        this.items[j].amount += 1;
+                    }
+                }else {
+                    this.items.push(item);
+                }
+            }
 
         }
 

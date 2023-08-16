@@ -11,6 +11,9 @@ class Item {
         this.handImage = null;
         this.iconFrame = 0;
 
+        this.maxStack = 1;
+        this.amount = 1;
+
         this.frameUpDown = 0;
         this.frameLeftRight = 0;
 

@@ -12,9 +12,9 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.setTexture(texture);
         this.setPosition(x, y);
 
+        this.setPipeline("Light2D");
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true);
-        scene.add.existing(this);
 
         this.body.setSize(6, 3);
         this.body.setOffset(13, 29);
@@ -25,7 +25,7 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         //Always scale the npc's a little
         this.setScale(1.25);
 
-        this.walkSpeed = 20;
+        this.walkSpeed = 15;
         this.isWalking = {
             left: false,
             right: false,
@@ -51,14 +51,14 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.firstName = "John";
         this.lastName = "Doe";
 
-        this.setPipeline("Light2D");
-
         this.dialogues = [];
         this.currentDialogueIndex = 0;
 
         this.items = new ItemManager(this);
         this.items.addItem(new HandLamp(this.items));
         this.handItem = null;
+
+        scene.add.existing(this);
 
     }
 

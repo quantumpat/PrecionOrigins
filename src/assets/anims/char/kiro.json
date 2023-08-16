@@ -107,7 +107,7 @@
           "visible": false
         }
       ],
-      "frameRate": 5,
+      "frameRate": 4,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -146,7 +146,7 @@
           "visible": false
         }
       ],
-      "frameRate": 5,
+      "frameRate": 4,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -263,7 +263,7 @@
           "visible": false
         }
       ],
-      "frameRate": 5,
+      "frameRate": 4,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
@@ -302,7 +302,7 @@
           "visible": false
         }
       ],
-      "frameRate": 5,
+      "frameRate": 4,
       "duration": 1.5,
       "skipMissedFrames": false,
       "delay": 0,
