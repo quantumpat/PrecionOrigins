@@ -222,15 +222,6 @@ class UIScene extends Phaser.Scene {
 
     }
 
-    save() {
-        const dialogue = new Dialogue(this.dialogueManager, [
-            new DialoguePart({
-                text: "Game Saved!",
-                type: 2
-            })
-        ]);
-    }
-
     openMenu() {
 
         if (this.isMenuOpen) {

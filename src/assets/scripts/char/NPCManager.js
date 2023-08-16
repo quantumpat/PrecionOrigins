@@ -62,8 +62,8 @@ class NPCManager {
                     currentDialogueIndex: npc.currentDialogueIndex,
                     canTalk: npc.canTalk,
                     currentMovementName: null,
-                    handItem: null,
-                    items: npc.items.generateSaveData()
+                    items: npc.items.generateSaveData(),
+                    handItem: null
                 }
             };
 

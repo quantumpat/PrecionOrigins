@@ -19,13 +19,13 @@ let sceneData = {
         distanceMoved: 0,
         hasSprinted: false,
         health: 1000,
-        handItem: null,
         items: [
             {
                 name: "hand-lamp",
                 data: {}
             }
-        ]
+        ],
+        handItem: null
     },
     characters: [
         {
@@ -38,13 +38,13 @@ let sceneData = {
                 health: 1000,
                 currentDialogueIndex: 0,
                 currentMovementName: null,
-                handItem: "hand-lamp",
                 items: [
                     {
                         name: "hand-lamp",
                         data: {}
                     }
-                ]
+                ],
+                handItem: "hand-lamp"
             }
         }
     ],
@@ -58,8 +58,8 @@ let sceneData = {
                 attackTarget: null,
                 direction: "left",
                 currentMovementName: null,
-                handItem: null,
-                items: []
+                items: [],
+                handItem: null
             }
         }
     ],
@@ -530,14 +530,6 @@ class TakarTutorialScene extends Phaser.Scene {
                     this.uiScene.dialogueManager.start(this.dialogue1);
                 }
             }
-        }
-
-        if (this.player.getTalking()) {
-            this.uiScene.saveGameBtn.setVisible(false);
-            this.gameControls.setControlsEnabled(false);
-        }else {
-            this.uiScene.saveGameBtn.setVisible(true);
-            this.gameControls.setControlsEnabled(true);
         }
 
     }

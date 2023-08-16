@@ -5,7 +5,6 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     /*
      * Constructor
      */
-
     constructor(name, scene, x, y, texture) {
         super(scene, x, y);
 
@@ -13,20 +12,18 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         this.setTexture(texture);
         this.setPosition(x, y);
-
-        this.movements = [];
-
         scene.physics.add.existing(this);
         this.setCollideWorldBounds(true);
-
         this.setPushable(false);
 
+        //Animations
         this.animsKey = "none";
 
-        this.type = "passive";
+        //Items
+        this.items = new ItemManager(this);
+        this.handItem = null;
 
-        this.items = [];
-
+        //Body
         this.directionalBody = false;
         this.directionalBodyOffsets = {
             leftRight: {
@@ -53,19 +50,16 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.isTamed = false;
         this.isTamedBy = null;
 
+        //Movement
         this.hasIdleAnimation = false;
-
-        this.walkSpeed = 10;
-
         this.direction = "down";
-
+        this.walkSpeed = 10;
         this.isWalking = {
             left: false,
             right: false,
             up: false,
             down: false
         };
-
         this.currentMovement = null;
         this.movements = [];
 
@@ -75,15 +69,20 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.isAttacking = false;
         this.attackTarget = null;
         this.attackDamage = 10;
-        this.attackRadius = 30;
+        this.attackRadius = {
+            x: 32,
+            y: 32
+        };
         this.canMoveAtTarget = true;
         this.attackMovement = null;
         this.inAttackRadius = false;
         this.attackDelay = 1000;
+        this.attackType = "passive";
 
         //Lights
         this.setPipeline("Light2D");
 
+        //Add to scene
         scene.add.existing(this);
 
     }
@@ -92,12 +91,19 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     /*
      * Methods
      */
-
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
 
         this.setDepth(this.y);
 
+        this.updateBody();
+        this.updateAttacking();
+        this.updateWalking();
+        this.updateAnimations();
+
+    }
+
+    updateBody() {
         if (this.directionalBody) {
             if (this.direction === "left" || this.direction === "right") {
                 this.body.setSize(this.directionalBodySizes.leftRight.width, this.directionalBodySizes.leftRight.height);
@@ -107,32 +113,6 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                 this.body.setOffset(this.directionalBodyOffsets.upDown.x, this.directionalBodyOffsets.upDown.y);
             }
         }
-
-        this.updateAttacking();
-
-        if (!this.isAttacking && !this.scene.uiScene.isSaving) {
-            this.updateWalking();
-        }else {
-            this.body.setVelocity(0, 0);
-        }
-
-        this.updateAnimations();
-
-    }
-
-    startMovement(name) {
-
-        if (name == null) {
-            return;
-        }
-
-        for (let i = 0; i < this.movements.length; i++) {
-            if (this.movements[i].getName() === name) {
-                this.currentMovement = this.movements[i];
-                this.currentMovement.start();
-            }
-        }
-
     }
 
     updateAttacking() {
@@ -146,7 +126,14 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         let dist = Math.sqrt(Math.pow(changeX, 2) + Math.pow(changeY, 2));
 
-        if (dist <= this.attackRadius) {
+        let currRad = 0;
+        if (this.direction === "left" || this.direction === "right") {
+            currRad = this.attackRadius.x;
+        }else {
+            currRad = this.attackRadius.y;
+        }
+
+        if (dist <= currRad) {
 
             this.inAttackRadius = true;
 
@@ -169,6 +156,12 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
     }
 
     updateWalking() {
+
+        if (this.isAttacking || this.scene.uiScene.isSaving) {
+            this.body.setVelocity(0, 0);
+            return;
+        }
+
         if (this.currentMovement != null) {
             this.currentMovement.update();
         }
@@ -220,6 +213,21 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         }else if (!this.isAttacking) {
             this.anims.stop();
+        }
+
+    }
+
+    startMovement(name) {
+
+        if (name == null) {
+            return;
+        }
+
+        for (let i = 0; i < this.movements.length; i++) {
+            if (this.movements[i].getName() === name) {
+                this.currentMovement = this.movements[i];
+                this.currentMovement.start();
+            }
         }
 
     }
@@ -291,6 +299,27 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.animsKey = key;
     }
 
+    getItems() {
+        return this.items;
+    }
+
+    getHandItem() {
+        return this.handItem;
+    }
+
+    setHandItem(item) {
+        if (this.handItem != null) {
+            this.handItem.off();
+            this.handItem.update();
+        }
+
+        this.handItem = item;
+
+        if (this.handItem != null) {
+            this.handItem.on();
+        }
+    }
+
     getType() {
         return this.type;
     }
@@ -351,14 +380,6 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.hasIdleAnimation = value;
     }
 
-    getWalkSpeed() {
-        return this.walkSpeed;
-    }
-
-    setWalkSpeed(speed) {
-        this.walkSpeed = speed;
-    }
-
     getDirection() {
         return this.direction;
     }
@@ -377,6 +398,14 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                 this.setFrame(12);
             }
         }
+    }
+
+    getWalkSpeed() {
+        return this.walkSpeed;
+    }
+
+    setWalkSpeed(speed) {
+        this.walkSpeed = speed;
     }
 
     getWalking() {
@@ -459,8 +488,24 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         return this.attackRadius;
     }
 
-    setAttackRadius(radius) {
-        this.attackRadius = radius;
+    setAttackRadius(obj) {
+        this.attackRadius = obj;
+    }
+
+    getAttackRadiusX() {
+        return this.attackRadius.x;
+    }
+
+    setAttackRadiusX(x) {
+        this.attackRadius.x = x;
+    }
+
+    getAttackRadiusY() {
+        return this.attackRadius.y;
+    }
+
+    setAttackRadiusY(y) {
+        this.attackRadius.y = y;
     }
 
     getAttackDamage() {
@@ -489,10 +534,6 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
     getInAttackRadius() {
         return this.inAttackRadius;
-    }
-
-    getAttackLoop() {
-        return this.attackLoop;
     }
 
     getAttackDelay() {

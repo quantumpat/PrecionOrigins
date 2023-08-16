@@ -39,11 +39,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.isSprinting = false;
         this.isStanding = true;
 
+        //Name
         this.firstName = "Henry";
         this.lastName = "Hartoni";
 
+        //Items
         this.isLampOn = false;
-
         this.items = new ItemManager(this);
         this.handItem = null;
 
@@ -69,12 +70,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         super.preUpdate(time, delta);
 
-        this.scene.gameControls.update();
-
         this.scene.sound.setListenerPosition(this.x, this.y);
 
         this.setDepth(Math.round(this.y));
 
+        //Controls
+        if (this.scene.gameControls != null) {
+            if (this.isTalking) {
+                this.scene.gameControls.setControlsEnabled(false);
+            }else {
+                this.scene.gameControls.setControlsEnabled(true);
+            }
+        }
+        this.scene.gameControls.update();
+
+        //Hand item
         if (this.handItem != null) {
             this.handItem.update();
         }
@@ -106,8 +116,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             health: this.health,
             distanceMoved: this.distanceMoved,
             hasSprinted: this.hasSprintEverBeenPressed,
-            handItem: null,
-            items: this.items.generateSaveData()
+            items: this.items.generateSaveData(),
+            handItem: null
         };
 
         if (this.handItem != null) {
@@ -368,6 +378,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         return this.items;
     }
 
+    getHandItem() {
+        return this.handItem;
+    }
+
     setHandItem(item, playNoise = true) {
         if (this.handItem != null) {
             this.handItem.off();
@@ -391,10 +405,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.handItem != null) {
             this.handItem.on();
         }
-    }
-
-    getHandItem() {
-        return this.handItem;
     }
 
     getCurrentAnimationKey() {

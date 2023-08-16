@@ -16,6 +16,7 @@ class MobManager {
     /*
      * Methods
      */
+    //Generates all mobs from the save file
     generateMobs(mobData) {
 
         for (let i = 0; i < mobData.length; i++) {
@@ -26,6 +27,7 @@ class MobManager {
 
     }
 
+    //Creates individual mobs based on name (really the type of mob that should be spawned) and data
     createMob(name, data) {
 
         if (name === "panda") {
@@ -44,6 +46,7 @@ class MobManager {
 
     }
 
+    //Turns all the active mobs in the current scene into savable data
     generateSave() {
 
         let mobArray = [];
@@ -60,12 +63,10 @@ class MobManager {
                     attackTarget: null,
                     direction: mob.direction,
                     currentMovementName: null,
-                    handItem: null,
-                    items: []
+                    items: mob.items.generateSaveData(),
+                    handItem: null
                 }
             };
-
-            console.log(mob.x);
 
             if (mob.getCurrentMovement() != null) {
                 mobData.data.currentMovementName = mob.getCurrentMovement().getName();
@@ -73,6 +74,10 @@ class MobManager {
 
             if (mob.getAttackTarget() === this.scene.player) {
                 mobData.data.attackTarget = "player";
+            }
+
+            if (mob.getHandItem() != null) {
+                mobData.data.handItem = mob.getHandItem().getName();
             }
 
             mobArray.push(mobData);
@@ -83,6 +88,7 @@ class MobManager {
 
     }
 
+    //Makes all the mobs physically interact with a certain sprite
     addPhysics(sprite, ignoredSprites = []) {
 
         for (let i = 0; i < this.mobs.length; i++) {
@@ -114,17 +120,19 @@ class MobManager {
         this.scene = scene;
     }
 
-    getNpcs() {
-        return this.npcs;
+    getMob() {
+        return this.mobs;
     }
 
-    getNpc(name) {
+    getMob(name) {
 
-        for (let i = 0; i < this.npcs.length; i++) {
-            if (this.npcs[i].name === name) {
-                return this.npcs[i];
+        for (let i = 0; i < this.mobs.length; i++) {
+            if (this.mobs[i].name === name) {
+                return this.mobs[i];
             }
         }
+
+        return null;
 
     }
 

@@ -27,6 +27,10 @@ class Panda extends Mob {
         this.hasIdleAnimation = true;
 
         this.setAttackDelay(1500);
+        this.setAttackRadius({
+            x: 30,
+            y: 20
+        });
 
     }
 
