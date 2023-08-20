@@ -4,7 +4,7 @@ let fadeIn = false;
 
 
 /*
- * Scene Data (for game loadig/saving)
+ * Scene Data (for game loading/saving)
  */
 let loadData = null;
 let sceneData = {
@@ -56,6 +56,7 @@ let sceneData = {
                 y: 335,
                 health: 100,
                 attackTarget: null,
+                followTarget: null,
                 direction: "left",
                 currentMovementName: null,
                 items: [],
@@ -293,9 +294,6 @@ class TakarTutorialScene extends Phaser.Scene {
 
         this.butterflies = new Butterflies(this);
         this.butterflies.generate(10);
-
-
-        this.mobManager.getMob("panda").startFollow(this.player);
 
 
 

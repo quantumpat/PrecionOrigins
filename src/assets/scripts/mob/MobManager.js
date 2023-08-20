@@ -39,6 +39,9 @@ class MobManager {
             if (data.attackTarget === "player") {
                 mob.startAttack(this.scene.player);
             }
+            if (data.followTarget === "player") {
+                mob.startFollow(this.scene.player);
+            }
 
             this.mobs.push(mob);
 
@@ -61,6 +64,7 @@ class MobManager {
                     y: mob.y,
                     health: mob.health,
                     attackTarget: null,
+                    followTarget: null,
                     direction: mob.direction,
                     currentMovementName: null,
                     items: mob.items.generateSaveData(),
@@ -74,6 +78,10 @@ class MobManager {
 
             if (mob.getAttackTarget() === this.scene.player) {
                 mobData.data.attackTarget = "player";
+            }
+
+            if (mob.getFollowTarget() === this.scene.player) {
+                mobData.data.followTarget = "player";
             }
 
             if (mob.getHandItem() != null) {

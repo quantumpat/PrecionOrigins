@@ -180,10 +180,12 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             if (dist <= this.followRadius) {
                 this.followMovement.end();
             }else {
-                if (!this.followMovement.inProgress) {
-                    this.followMovement.start();
+                if (dist > this.followRadius + 20) {
+                    if (!this.followMovement.inProgress) {
+                        this.followMovement.start();
+                    }
+                    this.followMovement.update();
                 }
-                this.followMovement.update();
             }
         }
 
