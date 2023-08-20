@@ -278,7 +278,7 @@ class TakarTutorialScene extends Phaser.Scene {
         this.player = new Player(this, sceneData.player.x, sceneData.player.y);
         this.player.load(sceneData.player);
         this.conversations.setPlayer(this.player);
-        this.gameControls.setControlledSprite(this.player);
+        this.gameControls.setPlayer(this.player);
 
         //NPCs
         this.npcManager.generateNpcs(sceneData.characters);
@@ -293,6 +293,9 @@ class TakarTutorialScene extends Phaser.Scene {
 
         this.butterflies = new Butterflies(this);
         this.butterflies.generate(10);
+
+
+        this.mobManager.getMob("panda").startFollow(this.player);
 
 
 

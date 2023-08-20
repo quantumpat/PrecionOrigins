@@ -22,15 +22,20 @@ class HandLamp extends Item {
 
     }
 
+    on() {
+        super.on();
+
+        this.light.setVisible(true);
+    }
+
+    off() {
+        super.off();
+
+        this.light.setVisible(false);
+    }
+
     update() {
-
         super.update();
-
-        if (this.isActive) {
-            this.light.setVisible(true);
-        }else {
-            this.light.setVisible(false);
-        }
 
         this.light.setPosition(this.char.x, this.char.y);
     }

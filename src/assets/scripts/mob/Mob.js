@@ -78,6 +78,15 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
         this.inAttackRadius = false;
         this.attackDelay = 1000;
         this.attackType = "passive";
+        this.attackedBy = [];
+
+        //Taming
+        this.isTamed = false;
+        this.isFollowing = false;
+        this.followMovement = null;
+        this.followTarget = null;
+        this.followRadius = 50;
+        this.followedBy = [];
 
         //Lights
         this.setPipeline("Light2D");
@@ -98,6 +107,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
         this.updateBody();
         this.updateAttacking();
+        this.updateFollow();
         this.updateWalking();
         this.updateAnimations();
 
@@ -153,6 +163,30 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
                 this.attackMovement.end();
             }
         }
+    }
+
+    updateFollow() {
+
+        if (!this.isFollowing || this.isAttacking) {
+            return;
+        }
+
+        let changeX = this.x - this.followTarget.x;
+        let changeY = this.y - this.followTarget.y;
+
+        let dist = Math.sqrt(Math.pow(changeX, 2) + Math.pow(changeY, 2));
+
+        if (this.followMovement != null) {
+            if (dist <= this.followRadius) {
+                this.followMovement.end();
+            }else {
+                if (!this.followMovement.inProgress) {
+                    this.followMovement.start();
+                }
+                this.followMovement.update();
+            }
+        }
+
     }
 
     updateWalking() {
@@ -244,6 +278,16 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
     }
 
+    startFollow(target) {
+        this.setFollowTarget(target);
+        this.followMovement = new Movement("mob-" + this.name + "-follow", this, this.followTarget.x, this.followTarget.y, { atTarget: this.followTarget });
+        this.isFollowing = true;
+        if (target.followedBy != null) {
+            target.followedBy.push(this);
+        }
+        this.followMovement.start();
+    }
+
     attack() {
         if (this.isAttacking) {
             return;
@@ -263,7 +307,7 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
             callbackScope: this,
             loop: false
         });
-        console.log(this.attackTarget.health);
+
     }
 
 
@@ -542,6 +586,70 @@ class Mob extends Phaser.Physics.Arcade.Sprite {
 
     setAttackDelay(ms) {
         this.attackDelay = ms;
+    }
+
+    getAttackType() {
+        return this.attackType;
+    }
+
+    setAttackType(type) {
+        this.attackType = type;
+    }
+
+    getAttackedBy() {
+        return this.attackedBy;
+    }
+
+    setAttackedBy(array) {
+        this.attackedBy = array;
+    }
+
+    getTamed() {
+        return this.isTamed;
+    }
+
+    setTamed(tamed) {
+        this.tamed = tamed;
+    }
+
+    getFollowing() {
+        return this.isFollowing;
+    }
+
+    setFollowing(following) {
+        this.isFollowing = following;
+    }
+
+    getFollowMovement() {
+        return this.followMovement;
+    }
+
+    setFollowMovement(followMovement) {
+        this.followMovement = followMovement;
+    }
+
+    getFollowTarget() {
+        return this.followTarget;
+    }
+
+    setFollowTarget(target) {
+        this.followTarget = target;
+    }
+
+    getFollowRadius() {
+        return this.followRadius;
+    }
+
+    setFollowRadius(radius) {
+        this.followRadius = radius;
+    }
+
+    getFollowedBy() {
+        return this.followedBy;
+    }
+
+    setFollowedBy(array) {
+        this.followedBy = array;
     }
 
 }

@@ -16,6 +16,12 @@ class ItemManager {
      */
     generateFromSave(saveData) {
 
+        for (let i = 0; i < this.items.length; i++) {
+            this.items[i].off();
+        }
+
+        this.items = [];
+
         for (let i = 0; i < saveData.length; i++) {
 
             let data = saveData[i];
@@ -27,15 +33,7 @@ class ItemManager {
 
             }
 
-            for (let j = 0; j < this.items.length; j++) {
-                if (this.items[j].name === data.name) {
-                    if (this.items[j].amount < this.items[j].maxStack) {
-                        this.items[j].amount += 1;
-                    }
-                }else {
-                    this.items.push(item);
-                }
-            }
+            this.items.push(item);
 
         }
 

@@ -46,6 +46,9 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
         this.direction = "down";
         this.setFrame(8);
 
+        this.attackedBy = [];
+        this.followedBy = [];
+
         this.isStanding = true;
 
         this.firstName = "John";
@@ -336,6 +339,22 @@ class NPC extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
+    }
+
+    getAttackedBy() {
+        return this.attackedBy;
+    }
+
+    setAttackedBy(array) {
+        this.attackedBy = array;
+    }
+
+    getFollowedBy() {
+        return this.followedBy;
+    }
+
+    setFollowedBy(array) {
+        this.followedBy = array;
     }
 
     getStanding() {

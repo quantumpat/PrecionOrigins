@@ -262,13 +262,13 @@ class GameControls {
     /*
      * Constructor
      */
-    constructor(scene, controlledSprite) {
+    constructor(scene, player) {
 
         this.scene = scene;
 
         this.controlsEnabled = false;
 
-        this.controlledSprite = controlledSprite;
+        this.player = player;
 
         this.hasSprintEverBeenPressed = false;
 
@@ -299,7 +299,7 @@ class GameControls {
             }
 
             if (event.keyCode == this.lamp.keyCode) {
-                this.controlledSprite.setLampOn(!this.controlledSprite.isLampOn);
+                this.player.setLampOn(!this.player.isLampOn);
             }
 
             if (event.keyCode == this.talk.keyCode) {
@@ -307,7 +307,7 @@ class GameControls {
                 if (this.scene.conversations.getNearestNpc() != null) {
 
                     this.scene.conversations.start();
-                    this.controlledSprite.onTalk(scene);
+                    this.player.onTalk(scene);
                     this.hideHint();
 
                 }
@@ -323,74 +323,82 @@ class GameControls {
      */
     update() {
 
+        if (this.scene == null) {
+            return;
+        }
+
+        if (this.scene.player != null) {
+            if (this.scene.player.getTalking()) {
+                this.controlsEnabled = false;
+            }else {
+                this.controlsEnabled = true;
+            }
+        }
+
         if (!this.controlsEnabled) {
             return;
         }
 
-        if (this.controlledSprite == null) {
-            return;
-        }
-
         if (this.sprint.isDown) {
-            this.controlledSprite.sprint();
+            this.player.sprint();
             this.hasSprintEverBeenPressed = true;
         }else {
-            this.controlledSprite.walk();
+            this.player.walk();
         }
 
         //move up
         if (this.moveUp.isDown && this.moveDown.isUp && this.moveLeft.isUp && this.moveRight.isUp) {
-            this.controlledSprite.moveUp();
+            this.player.moveUp();
         }
 
         //move down
         if (this.moveUp.isUp && this.moveDown.isDown && this.moveLeft.isUp && this.moveRight.isUp) {
-            this.controlledSprite.moveDown();
+            this.player.moveDown();
         }
 
         //move left
         if (this.moveUp.isUp && this.moveDown.isUp && this.moveLeft.isDown && this.moveRight.isUp) {
-            this.controlledSprite.moveLeft();
+            this.player.moveLeft();
         }
 
         //move right
         if (this.moveUp.isUp && this.moveDown.isUp && this.moveLeft.isUp && this.moveRight.isDown) {
-            this.controlledSprite.moveRight();
+            this.player.moveRight();
         }
         
         //move up-left
         if (this.moveUp.isDown && this.moveDown.isUp && this.moveLeft.isDown && this.moveRight.isUp) {
-            this.controlledSprite.moveUpLeft();
+            this.player.moveUpLeft();
         }
 
         //move up-right
         if (this.moveUp.isDown && this.moveDown.isUp && this.moveLeft.isUp && this.moveRight.isDown) {
-            this.controlledSprite.moveUpRight();
+            this.player.moveUpRight();
         }
 
         //move down-left
         if (this.moveUp.isUp && this.moveDown.isDown && this.moveLeft.isDown && this.moveRight.isUp) {
-            this.controlledSprite.moveDownLeft();
+            this.player.moveDownLeft();
         }
 
         //move down-right
         if (this.moveUp.isUp && this.moveDown.isDown && this.moveLeft.isUp && this.moveRight.isDown) {
-            this.controlledSprite.moveDownRight();
+            this.player.moveDownRight();
         }
 
         //All up
         if (this.moveUp.isUp && this.moveDown.isUp && this.moveLeft.isUp && this.moveRight.isUp) {
-            this.controlledSprite.stopMovement();
+            this.player.stopMovement();
         }
 
         //move up-down
         if (this.moveUp.isDown && this.moveDown.isDown && this.moveLeft.isUp && this.moveRight.isUp) {
-            this.controlledSprite.stopMovement();
+            this.player.stopMovement();
         }
 
         //move left-right
         if (this.moveUp.isUp && this.moveDown.isUp && this.moveLeft.isDown && this.moveRight.isDown) {
-            this.controlledSprite.stopMovement();
+            this.player.stopMovement();
         }
 
     }
@@ -399,7 +407,7 @@ class GameControls {
 
         if (hint == "talk") {
 
-            if (this.controlledSprite.getTalking()) {
+            if (this.player.getTalking()) {
                 return;
             }
 
@@ -447,16 +455,16 @@ class GameControls {
         this.controlsEnabled = enabled;
 
         if (!enabled) {
-            this.controlledSprite.stopMovement();
+            this.player.stopMovement();
         }
     }
 
-    getControlledSprite() {
-        return this.controlledSprite;
+    getPlayer() {
+        return this.player;
     }
 
-    setControlledSprite(sprite) {
-        this.controlledSprite = sprite;
+    setPlayer(sprite) {
+        this.player = sprite;
     }
 
     getHasSprintEverBeenPressed() {

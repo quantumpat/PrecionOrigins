@@ -34,7 +34,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.distanceMoved = 0;
 
         this.health = 1000;
+
         this.attackedBy = [];
+        this.followedBy = [];
 
         this.isSprinting = false;
         this.isStanding = true;
@@ -74,15 +76,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.setDepth(Math.round(this.y));
 
-        //Controls
         if (this.scene.gameControls != null) {
-            if (this.isTalking) {
-                this.scene.gameControls.setControlsEnabled(false);
-            }else {
-                this.scene.gameControls.setControlsEnabled(true);
-            }
+            this.scene.gameControls.update();
         }
-        this.scene.gameControls.update();
 
         //Hand item
         if (this.handItem != null) {
@@ -92,7 +88,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     load(data) {
-
         this.setVisible(false);
 
         this.setPosition(data.x, data.y);
@@ -104,7 +99,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setHandItem(this.items.getItem(data.handItem), false);
 
         this.setVisible(true);
-
     }
 
     generateSave() {
@@ -126,6 +120,205 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         return playerData;
     }
+
+
+    /*
+     * Getters & Setters
+     */
+    getAnimationKey() {
+
+        let str = "";
+
+        if (this.isSprinting) {
+            str = "sprint-";
+        }else {
+            str = "walk-";
+        }
+
+        str += this.direction;
+
+        if (this.handItem != null) {
+            if (this.handItem.type == "tool") {
+                str += "-tool";
+            }
+        }
+
+        this.currentAnimationKey = str;
+
+        return str;
+
+    }
+
+    getFrameAltKey() {
+
+        if (this.handItem == null) {
+
+            if (this.direction == "up") {
+                return 4;
+            }else if (this.direction == "down") {
+                return 0;
+            }else if (this.direction == "left") {
+                return 8;
+            }else if (this.direction == "right") {
+                return 12;
+            }
+
+        }else {
+
+            if (this.direction == "up") {
+                return 40;
+            }else if (this.direction == "down") {
+                return 36;
+            }else if (this.direction == "left") {
+                return 44;
+            }else if (this.direction == "right") {
+                return 48;
+            }
+
+        }
+
+    }
+
+    getDirection() {
+        return this.direction;
+    }
+
+    setDirection(direction) {
+        this.direction = direction;
+    }
+
+    getWalkSpeed() {
+        return this.walkSpeed;
+    }
+
+    getSprintSpeed() {
+        return this.sprintSpeed;
+    }
+
+    getCurrentSpeed() {
+        return this.currentSpeed;
+    }
+
+    getDistanceMoved() {
+        return this.distanceMoved;
+    }
+
+    setDistanceMoved(distance) {
+        this.distanceMoved = distance;
+    }
+
+    getHealth() {
+        return this.health;
+    }
+
+    setHealth(health) {
+        this.health = health;
+    }
+
+    getAttackedBy() {
+        return this.attackedBy;
+    }
+
+    setAttackedBy(array) {
+        this.attackedBy = array;
+    }
+
+    getFollowedBy() {
+        return this.followedBy;
+    }
+
+    setFollowedBy(array) {
+        this.followedBy = array;
+    }
+
+    getSprinting() {
+        return this.isSprinting;
+    }
+
+    getStanding() {
+        return this.isStanding;
+    }
+
+    getFirstName() {
+        return this.firstName;
+    }
+
+    getLastName() {
+        return this.lastName;
+    }
+
+    getLampOn() {
+        return this.isLampOn;
+    }
+
+    setLampOn(val) {
+        if (val) {
+            this.isLampOn = true;
+            this.setHandItem(this.items.getItem("hand-lamp"));
+        }else {
+            this.isLampOn = false;
+            this.setHandItem(null);
+        }
+    }
+
+    getItems() {
+        return this.items;
+    }
+
+    getHandItem() {
+        return this.handItem;
+    }
+
+    setHandItem(item, playNoise = true) {
+        if (this.handItem != null) {
+            this.handItem.off();
+            this.handItem.update();
+        }
+
+        this.handItem = item;
+
+        if (playNoise) {
+            this.scene.sound.play("audio-item-equip", {
+                loop: false,
+                volume: 0.6,
+                source: {
+                    x: 0,
+                    y: 0,
+                    refDistance: 1000000
+                }
+            });
+        }
+
+        if (this.handItem != null) {
+            this.handItem.on();
+        }
+
+    }
+
+    getCurrentAnimationKey() {
+        return this.currentAnimationKey;
+    }
+
+    getGameControls() {
+        return this.gameControls;
+    }
+
+    getTalking() {
+        return this.isTalking;
+    }
+
+    setTalking(talking) {
+        this.isTalking = talking;
+    }
+
+    getOnTalk() {
+        return this.onTalk;
+    }
+
+    setOnTalk(callback) {
+        this.onTalk = callback;
+    }
+
 
     /*
      * Movement (required by GameControl class)
@@ -256,187 +449,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setVelocity(this.currentSpeed, this.currentSpeed);
 
         this.play(this.getAnimationKey(), true);
-    }
-
-
-    /*
-     * Getters & Setters
-     */
-    getAnimationKey() {
-
-        let str = "";
-
-        if (this.isSprinting) {
-            str = "sprint-";
-        }else {
-            str = "walk-";
-        }
-
-        str += this.direction;
-
-        if (this.handItem != null) {
-            if (this.handItem.type == "tool") {
-                str += "-tool";
-            }
-        }
-
-        this.currentAnimationKey = str;
-
-        return str;
-
-    }
-
-    getFrameAltKey() {
-
-        if (this.handItem == null) {
-
-            if (this.direction == "up") {
-                return 4;
-            }else if (this.direction == "down") {
-                return 0;
-            }else if (this.direction == "left") {
-                return 8;
-            }else if (this.direction == "right") {
-                return 12;
-            }
-
-        }else {
-
-            if (this.direction == "up") {
-                return 40;
-            }else if (this.direction == "down") {
-                return 36;
-            }else if (this.direction == "left") {
-                return 44;
-            }else if (this.direction == "right") {
-                return 48;
-            }
-
-        }
-
-    }
-
-    getDirection() {
-        return this.direction;
-    }
-
-    setDirection(direction) {
-        this.direction = direction;
-    }
-
-    getWalkSpeed() {
-        return this.walkSpeed;
-    }
-
-    getSprintSpeed() {
-        return this.sprintSpeed;
-    }
-
-    getCurrentSpeed() {
-        return this.currentSpeed;
-    }
-
-    getDistanceMoved() {
-        return this.distanceMoved;
-    }
-
-    setDistanceMoved(distance) {
-        this.distanceMoved = distance;
-    }
-
-    getSprinting() {
-        return this.isSprinting;
-    }
-
-    getStanding() {
-        return this.isStanding;
-    }
-
-    getFirstName() {
-        return this.firstName;
-    }
-
-    getLastName() {
-        return this.lastName;
-    }
-
-    getLampOn() {
-        return this.isLampOn;
-    }
-
-    setLampOn(val) {
-        if (val) {
-            this.isLampOn = true;
-            this.setHandItem(this.items.getItem("hand-lamp"));
-        }else {
-            this.isLampOn = false;
-            this.setHandItem(null);
-        }
-    }
-
-    getItems() {
-        return this.items;
-    }
-
-    getHandItem() {
-        return this.handItem;
-    }
-
-    setHandItem(item, playNoise = true) {
-        if (this.handItem != null) {
-            this.handItem.off();
-            this.handItem.update();
-        }
-
-        this.handItem = item;
-
-        if (playNoise) {
-            this.scene.sound.play("audio-item-equip", {
-                loop: false,
-                volume: 0.6,
-                source: {
-                    x: 0,
-                    y: 0,
-                    refDistance: 1000000
-                }
-            });
-        }
-
-        if (this.handItem != null) {
-            this.handItem.on();
-        }
-    }
-
-    getCurrentAnimationKey() {
-        return this.currentAnimationKey;
-    }
-
-    getGameControls() {
-        return this.gameControls;
-    }
-
-    getTalking() {
-        return this.isTalking;
-    }
-
-    setTalking(talking) {
-        this.isTalking = talking;
-    }
-
-    getOnTalk() {
-        return this.onTalk;
-    }
-
-    setOnTalk(callback) {
-        this.onTalk = callback;
-    }
-
-    getHealth() {
-        return this.health;
-    }
-
-    setHealth(health) {
-        this.health = health;
     }
 
 }
